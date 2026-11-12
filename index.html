@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FamilySpot</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#BFE4FF">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FamilySpot">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap">
+<style>
+:root{--bg:#F5F3FF;--card:#fff;--ink:#1B1740;--mu:#5E5A85;--bd:#1B1740;--sh:#1B1740;--hero:#BFE4FF;--sun:#FFC531;--cor:#FF7A59;--mint:#3DD9B0;--sky:#8AC8FF;--grape:#A48BFF;--chip:#E6E1FF;box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14112E;--card:#221D4D;--ink:#F3F0FF;--mu:#B1ABDD;--bd:#7D72E8;--sh:#07051A;--hero:#2B2570;--chip:#2E2866}}
+:root[data-theme="dark"]{--bg:#14112E;--card:#221D4D;--ink:#F3F0FF;--mu:#B1ABDD;--bd:#7D72E8;--sh:#07051A;--hero:#2B2570;--chip:#2E2866}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 Nunito,system-ui,sans-serif}
+h1,h2,h3,.f{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600;margin:0}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+.mu{color:var(--mu);font-size:14px}
+.view{display:none;padding-bottom:120px}.view.on{display:block}
+.pad{padding:0 16px}
+.hero{background:var(--hero);border-bottom:2px solid var(--bd);border-radius:0 0 30px 30px;padding:16px 16px 0;overflow:hidden}
+.brand{display:flex;align-items:center;gap:8px;font:700 20px Fredoka,sans-serif}
+.hero h1{font-size:32px;line-height:1.15;margin:14px 0 14px}
+.sign,mark{display:inline-block;background:#FFD21E;color:#111;padding:0 12px;border:3px solid #111;border-radius:8px;box-shadow:inset 0 0 0 2px #FFD21E,inset 0 0 0 3.5px #111,0 0 0 3px #fff;font:800 1em Nunito,sans-serif;line-height:1.3}
+.sign.out{position:relative;font-size:20px;padding:2px 14px}.sign.out::after{content:"";position:absolute;left:-6%;right:-6%;top:50%;border-top:4px solid #111;transform:rotate(-14deg)}
+.pills{display:inline-flex;gap:2px;padding:3px;background:var(--card);border:2px solid var(--bd);border-radius:999px}
+.pills button{padding:8px 16px;min-height:40px;border-radius:999px;font-weight:800}
+.pills button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.hero svg.land{display:block;width:calc(100% + 32px);margin:6px -16px 0}
+.sec{font-size:21px;margin:22px 16px 10px}
+.tiles{display:flex;gap:10px;overflow-x:auto;padding:0 16px 8px;scrollbar-width:none}.tiles::-webkit-scrollbar{display:none}
+.tile{flex:none;width:94px;display:block;text-align:center;text-decoration:none;color:#1B1740;font-weight:800;font-size:13px;padding:10px 2px;border:2px solid var(--bd);border-radius:18px;box-shadow:0 3px 0 var(--sh)}
+.tile b{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 6px;font-size:26px;line-height:1;background:#fff;border:2px solid #1B1740;border-radius:50%}
+.tile:active,.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--sh)}
+.sc{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none}.sc::-webkit-scrollbar{display:none}
+.chip{flex:none;border:2px solid var(--bd);border-radius:999px;padding:6px 14px;min-height:40px;font-weight:700;background:var(--card)}
+.chip.on{background:var(--ink);color:var(--bg)}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}
+.cnt{margin:6px 16px 12px}
+.card{background:var(--card);border:2px solid var(--bd);border-radius:22px;box-shadow:0 4px 0 var(--sh);margin:0 0 16px}
+.pl{padding:14px}
+.top{display:flex;gap:12px;align-items:center;text-align:left;width:100%}
+.bd{width:50px;height:50px;border-radius:16px;border:2px solid var(--bd);display:grid;place-items:center;font-size:26px;flex:none;color:#1B1740}
+.tx{display:block;min-width:0}.tx h3{font-size:19px;line-height:1.2}
+.hint{margin:12px 0 2px}.dots{display:flex;align-items:center;gap:4px;margin:12px 0 2px}.dots .mu{margin-left:6px}
+.d{width:13px;height:13px;border-radius:50%;border:2px solid var(--bd);display:inline-block}.d.ja{background:var(--mint)}.d.nein{background:var(--cor)}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.pl .acts .btn{flex:1}.chev{margin-left:auto;font-size:26px;font-weight:800;color:var(--mu);padding-left:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 18px;border:2px solid var(--bd);border-radius:14px;background:var(--card);font-weight:800;text-decoration:none;box-shadow:0 3px 0 var(--sh);color:var(--ink)}
+.btn.dark{background:var(--ink);color:var(--bg)}.btn.on{background:var(--mint);color:#1B1740}
+.wide{display:flex;width:100%;margin-top:12px}
+.vh{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:20px 16px 12px}.vh h2{font-size:30px}
+.today{padding:16px;margin:0 0 20px}.today .f{font-size:19px;margin-bottom:10px}
+.idea{margin-top:14px;padding:16px;border:2px solid var(--bd);border-radius:18px;color:#1B1740}
+.idea h3{font-size:24px;line-height:1.2}.idea .mu{color:#1B1740;opacity:.8}.idea small{font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.tl{list-style:none;margin:0 0 14px;padding:0}
+.tl li{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:10px 12px;margin-bottom:10px;box-shadow:0 3px 0 var(--sh)}
+.tl li>div{flex:1;min-width:0}.tl b{display:block}
+.num{width:34px;height:34px;border-radius:50%;background:var(--sun);color:#1B1740;border:2px solid var(--bd);display:grid;place-items:center;font-weight:800;flex:none}
+.mv{display:flex;gap:4px}.mv button{width:38px;height:42px;border:2px solid var(--bd);border-radius:10px}
+.empty{padding:18px}.empty p{margin:6px 0 12px}
+.ev{display:flex;gap:12px;padding:12px;align-items:flex-start}.ev h3{font-size:18px}.ev>div{min-width:0}
+.date{flex:none;width:58px;text-align:center;background:var(--sun);color:#1B1740;border:2px solid var(--bd);border-radius:14px;padding:6px 0;font-weight:800;font-size:12px}
+.date b{display:block;font:600 24px Fredoka,sans-serif}
+.pf{padding:16px}.pf .f{font-size:19px}.sh3{font-size:18px;margin:18px 0 6px}
+.bar{height:16px;border:2px solid var(--bd);border-radius:999px;background:var(--chip);overflow:hidden;margin:8px 0 2px}.bar i{display:block;height:100%;background:var(--mint)}
+.note{margin:0 4px 16px}
+.nav{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:20;display:flex;gap:4px;padding:6px;background:var(--card);border:2px solid var(--bd);border-radius:26px;box-shadow:0 4px 0 var(--sh)}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:54px;border-radius:20px;font-size:12px;font-weight:800;color:var(--mu);justify-content:center}
+.nav button[aria-current="page"]{background:var(--sun);color:#1B1740}
+.nav svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ov{position:fixed;inset:0;z-index:40;background:rgba(10,8,30,.6);display:none}.ov.on{display:block}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:92%;overflow:auto;background:var(--bg);border:2px solid var(--bd);border-bottom:0;border-radius:30px 30px 0 0;padding:18px 16px calc(28px + env(safe-area-inset-bottom,0px))}
+.x{float:right;width:44px;height:44px;border:2px solid var(--bd);border-radius:50%;background:var(--card)}
+.sheet h2{font-size:26px;margin:10px 0 2px}.sheet .bd{width:60px;height:60px;font-size:32px}
+.frow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0;font-weight:700;font-size:15px}
+.tri{display:flex;gap:4px;flex:none}.tri button{min-width:46px;min-height:40px;border:2px solid var(--bd);border-radius:12px;font-weight:800;background:var(--card)}
+.tri .s.ja{background:var(--mint);color:#1B1740}.tri .s.nein{background:var(--cor);color:#1B1740}.tri .s.unbekannt{background:var(--chip)}
+.st{display:flex;flex:none}.st button{font-size:28px;min-width:36px;min-height:40px;color:var(--chip);-webkit-text-stroke:1.5px var(--bd)}.st button.on{color:var(--sun)}
+.fld{display:block;margin:10px 0;font-weight:700;font-size:14px}
+input,select,textarea{display:block;width:100%;margin-top:6px;font:inherit;color:var(--ink);background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:10px;min-height:46px}textarea{min-height:80px}
+.sheet h2 .sign{font-size:22px;padding:2px 12px}
+.st2{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border:2px solid var(--bd);border-radius:999px;margin:8px 6px 0 0;color:#1B1740}.st2.ok{background:var(--mint)}.st2.warn{background:var(--cor)}.st2.old{background:var(--sun)}.st2.none{background:var(--chip);color:var(--ink)}
+.tri .s.ja.bad{background:var(--cor)}.tri .s.nein.bad{background:var(--mint)}
+.pk{display:flex;gap:12px;align-items:center;padding:6px 0;font-weight:700}.pk input{display:inline-block;width:26px;min-height:26px;height:26px;margin:0;accent-color:#3DD9B0}
+.ctl{display:flex;gap:10px}.ctl .fld{flex:1;min-width:0;margin:6px 0}
+.tl select{width:auto;min-height:36px;padding:4px 8px;margin-top:4px}.tm{display:block;font-weight:800}
+.pl .acts a.btn,.pl .acts button.btn{min-width:0}
+.pl{position:relative;overflow:hidden;padding-left:24px}.pl::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--cc);border-right:2px solid var(--bd)}
+.tile small{display:block;font-weight:700;opacity:.7;font-size:11px;margin-top:2px}
+.opt{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px 6px;min-height:84px;border:2px solid var(--bd);border-radius:18px;background:var(--card);font-weight:800;font-size:14px;text-align:center;box-shadow:0 3px 0 var(--sh)}.opt b{font-size:28px;line-height:1.1}
+button.opt.on{background:var(--mint);color:#1B1740;transform:translateY(2px);box-shadow:0 1px 0 var(--sh)}
+.og{display:grid;gap:10px;margin:8px 0 14px}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pfh{background:var(--grape);color:#1B1740;padding:18px;margin-bottom:6px}.pfh h2{font-size:27px}.pfh p{margin:6px 0 10px}
+.bdg{opacity:.45;box-shadow:none}.bdg.on{opacity:1;background:var(--sun);color:#1B1740;box-shadow:0 3px 0 var(--sh)}.opt small{font-size:11px;font-weight:700}.bdg.on small{color:#1B1740}
+.pre{white-space:pre-wrap;word-break:break-word;font:14px/1.5 ui-monospace,Menlo,monospace;margin:0}.pad2{padding:16px}
+.fab{position:fixed;right:16px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:19;background:var(--cor);color:#1B1740;border:2px solid var(--bd);border-radius:999px;min-height:52px;padding:0 20px;font-weight:800;font-size:16px;box-shadow:0 4px 0 var(--sh)}.fab:active{transform:translateY(2px);box-shadow:0 2px 0 var(--sh)}
+.pad .sc{margin:0 -16px 6px}
+#sg{display:flex;width:100%}#sg button{flex:1;padding:8px 6px;font-size:15px}
+.rph{display:block;max-width:100%;max-height:170px;border-radius:12px;border:2px solid var(--bd);margin:6px 0}
+.more:not(.end){-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
+.fbar{display:flex;align-items:center;gap:12px;margin:2px 16px 12px}.fbar .mu{min-width:0}
+.rg.pills{border:0;background:none;padding:0}.citybtn{display:flex;align-items:center;gap:10px;font-weight:800;min-height:44px}
+.hero .citybtn{border:2px solid var(--bd);border-radius:999px;padding:0 18px;background:var(--card)}.hero .citybtn .sign{display:none}
+.toast{position:fixed;left:16px;right:16px;top:calc(12px + env(safe-area-inset-top,0px));z-index:60;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 16px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}.toast.on{opacity:1}
+.favb{flex:none!important;width:52px;padding:0!important;font-size:22px;color:var(--mu)}.favb.on{background:var(--cor);color:#1B1740}
+.tour{padding:16px}.tour h3{font-size:19px}.tour .row{margin:8px 0}
+</style>
+</head>
+<body>
+<section class="view on" id="v0">
+<header class="hero">
+<div class="brand"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="10" fill="#A48BFF" stroke="#1B1740" stroke-width="2"/><path d="M16 25s-6-5.5-6-10a6 6 0 0112 0c0 4.500-6 10-6 10z" fill="#FFC531" stroke="#1B1740" stroke-width="2"/><circle cx="16" cy="15" r="2.200" fill="#1B1740"/></svg>FamilySpot</div>
+<h1 id="h1"></h1>
+<div class="pills rg" role="group" aria-label="Region"></div>
+<svg class="land" viewBox="0 0 360 84" height="84" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle cx="300" cy="30" r="20" fill="#FFC531" stroke="#1B1740" stroke-width="2"/><path d="M0 62Q60 26 130 54T260 50T360 58V84H0Z" fill="#3DD9B0" stroke="#1B1740" stroke-width="2"/><path d="M60 52l9-20 9 20z" fill="#1B1740"/><path d="M0 76Q90 52 180 70T360 68V84H0Z" fill="#A48BFF" stroke="#1B1740" stroke-width="2"/></svg>
+</header>
+<h2 class="sec">Gerade dringend? Sofort suchen</h2>
+<div class="tiles" id="tiles"></div>
+<h2 class="sec">Beispielorte zum Ausprobieren</h2>
+<div class="pad"><input id="sq" type="search" placeholder="Ort suchen …" aria-label="Ort suchen" style="margin:0 0 10px"></div>
+<div class="sc" id="cats"></div>
+<div id="fl" hidden></div>
+<div class="fbar"><button class="chip" id="fb" data-filter>⚙ Filter</button><span class="mu" id="cnt"></span></div>
+<div class="pad" id="list"></div>
+</section>
+
+<section class="view" id="v1">
+<div class="vh"><h2>Heute</h2><div class="pills rg" role="group" aria-label="Region"></div></div>
+<div class="pad">
+<div class="card today"><p class="f">Wie ist das Wetter?</p><div class="pills" id="wx" role="group" aria-label="Wetter"></div><div id="idea"></div></div>
+<h2 class="f" style="font-size:22px;margin:0 0 10px">Mein Tag</h2>
+<div id="plan"></div>
+</div>
+</section>
+
+<section class="view" id="v2">
+<div class="vh"><h2>Erleben</h2></div>
+<div class="pad"><div class="pills" id="sg" role="group" aria-label="Bereich" style="margin-bottom:14px"></div><div id="eb"></div></div>
+</section>
+
+<section class="view" id="v3">
+<div class="vh"><h2>Euer Profil</h2></div>
+<div class="pad" id="pf"></div>
+</section>
+
+<button class="fab" data-fab aria-label="Vor Ort melden oder Check-in machen">📍 Vor Ort</button>
+<nav class="nav" id="nav" aria-label="Hauptmenü">
+<button data-tab="0" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.500 8.500l-2 5-5 2 2-5z"/></svg>Entdecken</button>
+<button data-tab="1"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.900 4.900l1.400 1.400M17.700 17.700l1.400 1.400M4.900 19.100l1.400-1.400M17.700 6.300l1.400-1.400"/></svg>Heute</button>
+<button data-tab="2"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Erleben</button>
+<button data-tab="3"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>Profil</button>
+</nav>
+<div class="ov" id="ov"><div class="sheet" id="sh" role="dialog" aria-modal="true"></div></div>
+
+<script>
+const $=i=>document.getElementById(i);
+const P=[
+{r:'Köln',n:'Kölner Zoo',c:'Tierpark',w:'both',q:'Kölner Zoo Köln'},
+{r:'Köln',n:'Odysseum Köln',c:'Erlebniswelt',w:'in',q:'Odysseum Köln'},
+{r:'Köln',n:'Schokoladenmuseum Köln',c:'Museum',w:'in',q:'Schokoladenmuseum Köln'},
+{r:'Köln',n:'Flora und Botanischer Garten',c:'Park',w:'out',q:'Flora und Botanischer Garten Köln'},
+{r:'Köln',n:'Rheinpark Köln',c:'Park',w:'out',q:'Rheinpark Köln'},
+{r:'Kassel',n:'Bergpark Wilhelmshöhe',c:'Park',w:'out',q:'Bergpark Wilhelmshöhe Kassel'},
+{r:'Kassel',n:'Karlsaue',c:'Park',w:'out',q:'Karlsaue Kassel'},
+{r:'Kassel',n:'Tierpark Kassel',c:'Tierpark',w:'out',q:'Tierpark Kassel'},
+{r:'Kassel',n:'GRIMMWELT Kassel',c:'Museum',w:'in',q:'GRIMMWELT Kassel'},
+{r:'Köln',n:'Stadtwald und Decksteiner Weiher',c:'Park',w:'out',q:'Decksteiner Weiher Köln'},
+{r:'Köln',n:'Aachener Weiher',c:'Park',w:'out',q:'Aachener Weiher Köln'},
+{r:'Köln',n:'Forstbotanischer Garten',c:'Park',w:'out',q:'Forstbotanischer Garten Köln'},
+{r:'Köln',n:'Fühlinger See',c:'Bad',w:'out',q:'Fühlinger See Köln'},
+{r:'Köln',n:'Kölner Seilbahn',c:'Sehenswürdigkeit',w:'out',q:'Kölner Seilbahn'},
+{r:'Köln',n:'Kölner Dom',c:'Sehenswürdigkeit',w:'in',q:'Kölner Dom'},
+{r:'Köln',n:'Phantasialand Brühl',c:'Freizeitpark',w:'both',q:'Phantasialand Brühl'},
+{r:'Kassel',n:'Herkules im Bergpark',c:'Sehenswürdigkeit',w:'out',q:'Herkules Kassel'},
+{r:'Kassel',n:'Schloss Wilhelmshöhe',c:'Museum',w:'in',q:'Schloss Wilhelmshöhe Kassel'},
+{r:'Kassel',n:'Naturkundemuseum im Ottoneum',c:'Museum',w:'in',q:'Naturkundemuseum Ottoneum Kassel'},
+{r:'Kassel',n:'Park Schönfeld',c:'Park',w:'out',q:'Park Schönfeld Kassel'},
+{r:'Kassel',n:'Fuldaaue',c:'Park',w:'out',q:'Fuldaaue Kassel'},
+{r:'Kassel',n:'Kurhessen Therme',c:'Bad',w:'in',q:'Kurhessen Therme Kassel'},
+{r:'Bonn',n:'Rheinaue',c:'Park',w:'out',q:'Rheinaue Bonn'},
+{r:'Bonn',n:'Haus der Geschichte',c:'Museum',w:'in',q:'Haus der Geschichte Bonn'},
+{r:'Bonn',n:'Museum Koenig',c:'Museum',w:'in',q:'Museum Koenig Bonn'},
+{r:'Bonn',n:'Botanische Gärten Bonn',c:'Park',w:'out',q:'Botanische Gärten Bonn'},
+{r:'Düsseldorf',n:'Nordpark',c:'Park',w:'out',q:'Nordpark Düsseldorf'},
+{r:'Düsseldorf',n:'Hofgarten',c:'Park',w:'out',q:'Hofgarten Düsseldorf'},
+{r:'Düsseldorf',n:'Rheinturm',c:'Sehenswürdigkeit',w:'both',q:'Rheinturm Düsseldorf'},
+{r:'Düsseldorf',n:'Rheinuferpromenade',c:'Sehenswürdigkeit',w:'out',q:'Rheinuferpromenade Düsseldorf'},
+{r:'Frankfurt',n:'Zoo Frankfurt',c:'Tierpark',w:'both',q:'Zoo Frankfurt'},
+{r:'Frankfurt',n:'Palmengarten',c:'Park',w:'both',q:'Palmengarten Frankfurt'},
+{r:'Frankfurt',n:'Senckenberg Naturmuseum',c:'Museum',w:'in',q:'Senckenberg Naturmuseum Frankfurt'},
+{r:'Frankfurt',n:'Mainufer',c:'Park',w:'out',q:'Mainufer Frankfurt'},
+{r:'Hamburg',n:'Tierpark Hagenbeck',c:'Tierpark',w:'out',q:'Tierpark Hagenbeck Hamburg'},
+{r:'Hamburg',n:'Miniatur Wunderland',c:'Erlebniswelt',w:'in',q:'Miniatur Wunderland Hamburg'},
+{r:'Hamburg',n:'Planten un Blomen',c:'Park',w:'out',q:'Planten un Blomen Hamburg'},
+{r:'Hamburg',n:'Landungsbrücken',c:'Sehenswürdigkeit',w:'out',q:'Landungsbrücken Hamburg'},
+{r:'Berlin',n:'Zoo Berlin',c:'Tierpark',w:'both',q:'Zoo Berlin'},
+{r:'Berlin',n:'Tierpark Berlin',c:'Tierpark',w:'out',q:'Tierpark Berlin'},
+{r:'Berlin',n:'Deutsches Technikmuseum',c:'Museum',w:'in',q:'Deutsches Technikmuseum Berlin'},
+{r:'Berlin',n:'Tempelhofer Feld',c:'Park',w:'out',q:'Tempelhofer Feld Berlin'},
+{r:'München',n:'Tierpark Hellabrunn',c:'Tierpark',w:'out',q:'Tierpark Hellabrunn München'},
+{r:'München',n:'Englischer Garten',c:'Park',w:'out',q:'Englischer Garten München'},
+{r:'München',n:'Deutsches Museum',c:'Museum',w:'in',q:'Deutsches Museum München'},
+{r:'München',n:'Olympiapark München',c:'Park',w:'both',q:'Olympiapark München'},
+{r:'Stuttgart',n:'Wilhelma',c:'Tierpark',w:'both',q:'Wilhelma Stuttgart'},
+{r:'Stuttgart',n:'Killesbergpark',c:'Park',w:'out',q:'Killesbergpark Stuttgart'},
+{r:'Stuttgart',n:'Mercedes-Benz Museum',c:'Museum',w:'in',q:'Mercedes-Benz Museum Stuttgart'},
+{r:'Stuttgart',n:'Fernsehturm Stuttgart',c:'Sehenswürdigkeit',w:'in',q:'Fernsehturm Stuttgart'}];
+const W={both:'Drinnen & draußen',in:'Drinnen',out:'Draußen'};
+const CAT={Tierpark:['🦒','--mint'],Erlebniswelt:['🔬','--grape'],Museum:['🏛️','--sky'],Park:['🌳','--sun'],Bad:['🏊','--sky'],'Sehenswürdigkeit':['🏰','--sun'],Freizeitpark:['🎢','--cor'],Spielplatz:['🛝','--sun']};
+const F=['Zaun','Schatten','Sitzgelegenheiten','Toilette','Wickeltisch','Trinkwasser','Kinderwagenzugang','Parkplatz','Rollstuhlgerecht'];
+const Z=[['Defekte Geräte','Gibt es defekte Geräte?'],['Glasscherben','Liegen Glasscherben herum?'],['Müll','Ist es vermüllt?'],['Vandalismus','Gibt es Vandalismus?']];
+const N=[['Toilette in der Nähe','Öffentliche Toilette in der Nähe?'],['Wickelmöglichkeit in der Nähe','Öffentlicher Wickelplatz in der Nähe?']];
+const AGES=['Baby','Kleinkind','Kindergarten','Schulkind','Jugendlich'];
+const DUR={Tierpark:180,Erlebniswelt:150,Museum:90,Park:60,Bad:120,'Sehenswürdigkeit':60,Freizeitpark:300,Spielplatz:45};
+const lab=f=>({'Toilette in der Nähe':'WC in der Nähe','Wickelmöglichkeit in der Nähe':'Wickeln in der Nähe'}[f]||f.replace('zugang',''));
+const T=[['🍼','Wickeln','Wickelraum in der Nähe','--cor'],['🚻','WC','öffentliche Toilette in der Nähe','--sky'],['💊','Apotheke','Apotheke in der Nähe','--mint'],['🛝','Spielplatz','Spielplatz','--sun'],['☕','Café','Café mit Spielecke','--cor'],['🏠','Indoor','Indoor Spielplatz','--sky'],['🦒','Tierpark','Tierpark','--mint'],['🏊','Bad','Schwimmbad','--grape'],['🍦','Eis','Eisdiele','--sun']];
+const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const S={r:'Köln',c:'Alle',io:'',ff:[],wx:'Egal',sk:0,sg:'ev',free:false,rv:{},cur:''};
+let D=null;try{D=JSON.parse(localStorage.getItem('fs_data'))}catch(e){}
+if(!D||!D.feat)D={feat:{},rev:{},rep:[],prof:{ages:[],stroller:'',dist:'',budget:''}};
+D.ev=D.ev||[];D.tr=D.tr||[];D.upd=D.upd||{};D.age=D.age||{};D.pd=D.pd||{};D.pack=D.pack||{};D.t0=D.t0||'10:00';D.buf=D.buf||20;D.cust=D.cust||[];D.cust.forEach(x=>P.push(x));D.fav=D.fav||[];D.news=D.news||[];S.ag=[];if(D.reg)S.r=D.reg;
+let plan=[];try{plan=JSON.parse(localStorage.getItem('fs_plan'))||[]}catch(e){}
+const byN=n=>P.find(p=>p.n===n);
+plan=plan.filter(byN);
+
+const sv=()=>{try{localStorage.setItem('fs_data',JSON.stringify(D));localStorage.setItem('fs_plan',JSON.stringify(plan))}catch(e){toast('Speicher voll: Die letzte Änderung konnte nicht gespeichert werden.')}};
+const fv=(n,f)=>(D.feat[n]||{})[f]||'unbekannt';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fd=t=>{const d=new Date(t);return d.toLocaleDateString('de-DE')+' '+d.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})};
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)};
+const rl=p=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.q);
+const fit=(p,io)=>!io||p.w===io||p.w==='both';
+const score=n=>{let k=0,j=0;F.forEach(f=>{const v=fv(n,f);if(v!=='unbekannt'){k++;if(v==='ja')j++}});return{k,j}};
+const route=()=>{const q=plan.map(n=>byN(n).q);let u='https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(q[q.length-1]);if(q.length>1)u+='&waypoints='+q.slice(0,-1).map(encodeURIComponent).join('%7C');return u};
+function chips(el,items,on,fn){el.innerHTML='';items.forEach(([l,k])=>{const b=document.createElement('button');b.className='chip'+(on(k)?' on':'');b.textContent=l;b.onclick=()=>fn(k);el.appendChild(b)})}
+const planBtn=(n,x='')=>`<button class="btn${plan.includes(n)?' on':''}" data-plan="${n}">${plan.includes(n)?'✓ Im Tag':'+ Zum Tag'}</button>`;
+
+function card(p){const[e,c]=CAT[p.c]||['📍','--sky'],n=p.n;
+return `<article class="card pl" style="--cc:var(${c})"><button class="top" data-open="${n}"><span class="bd" style="background:var(${c})">${e}</span><span class="tx"><h3>${n}</h3><span class="mu">${p.c} · ${W[p.w]}</span></span><span class="chev" aria-hidden="true">›</span></button>
+<div>${badges(n)}</div>
+${score(n).k?`<div class="dots" aria-label="Familien-Komfort">${F.map(f=>`<i class="d ${fv(n,f)}"></i>`).join('')}<span class="mu">${score(n).k} von ${F.length} bekannt</span></div>`:'<p class="mu hint">Komfort noch unbekannt. Tippe auf den Ort und hilf mit.</p>'}
+<div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a>${planBtn(n)}<button class="btn favb${D.fav.includes(n)?' on':''}" data-fav="${n}" aria-label="Favorit">♥</button></div></article>`}
+
+function rEnt(){
+ const L=P.filter(p=>p.r===S.r);
+ $('h1').innerHTML=`Was erleben wir<br>in <mark>${S.r}</mark>?`;
+ $('tiles').innerHTML=T.map(([e,l,q,c])=>`<a class="tile" style="background:var(${c})" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q.endsWith('Nähe')?q:q+' '+S.r)}"><b>${e}</b>${l}<small>in Maps ›</small></a>`).join('');
+ chips($('cats'),['Alle',...new Set(L.map(p=>p.c))].map(c=>[c,c]),k=>S.c===k,k=>{S.c=k;rEnt()});
+ chips($('fl'),[['Drinnen','in'],['Draußen','out'],...[...F,...N.map(x=>x[0])].map(f=>[lab(f),f])],k=>S.io===k||S.ff.includes(k),k=>{if(k==='in'||k==='out')S.io=S.io===k?'':k;else S.ff=S.ff.includes(k)?S.ff.filter(x=>x!==k):[...S.ff,k];rEnt()});
+ const B=L.filter(p=>(S.c==='Alle'||p.c===S.c)&&fit(p,S.io)),M=B.filter(p=>S.ff.every(f=>fv(p.n,f)==='ja'));
+ $('cnt').textContent=`${M.length} ${M.length===1?'Ort':'Orte'} in ${S.r} und Umgebung`+(S.ff.length?` · ${B.length-M.length} ohne passende Angabe ausgeblendet`:'');
+ $('list').innerHTML=M.length?M.map(card).join(''):'<div class="card empty"><b class="f">Keine Treffer</b><p class="mu">Für diese Auswahl gibt es noch keine bestätigten Angaben. Setz die Filter zurück oder trag selbst etwas ein.</p><button class="btn dark" data-reset>Filter zurücksetzen</button></div>';
+}
+function rToday(){
+ $('wx').innerHTML=[['☀️ Sonnig','Sonnig'],['🌧️ Regen','Regen'],['🤷 Egal','Egal']].map(([l,k])=>`<button data-wx="${k}" aria-pressed="${S.wx===k}">${l}</button>`).join('');
+ const L=P.filter(p=>p.r===S.r&&(S.wx==='Regen'?p.w==='in':S.wx==='Sonnig'?p.w!=='in':true)),p=L.length?L[S.sk%L.length]:null;
+ $('idea').innerHTML=p?`<div class="idea" style="background:var(${CAT[p.c][1]})"><small>Unser Vorschlag für ${S.r}</small><h3>${CAT[p.c][0]} ${p.n}</h3><p class="mu">${p.c} · ${W[p.w]}</p><div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a><button class="btn" data-sk>Andere Idee</button>${planBtn(p.n)}</div></div>`:'<p class="mu">Dafür haben wir noch keinen Ort. Wähle „Egal“.</p>';
+}
+function rPlan(){
+ $('plan').innerHTML=plan.length?`<ol class="tl">${plan.map((n,i)=>`<li><span class="num">${i+1}</span><div><b>${n}</b><span class="mu">${byN(n).r} · ${byN(n).c}</span></div><span class="mv"><button data-mv="up" data-i="${i}" aria-label="Nach oben">↑</button><button data-mv="dn" data-i="${i}" aria-label="Nach unten">↓</button><button data-mv="rm" data-i="${i}" aria-label="Entfernen">✕</button></span></li>`).join('')}</ol><a class="btn dark wide" target="_blank" rel="noopener" href="${route()}">Route in Google Maps öffnen</a>`:`<div class="card empty"><b class="f">Noch nichts geplant</b><p class="mu">Tippe bei einem Ort auf „+ Zum Tag“ und baue euren Ausflug.</p><button class="btn dark" data-tab="0">Orte entdecken</button></div>`;
+}
+function rEr(){
+ $('sg').innerHTML=[['Termine','ev'],['Touren','tr']].map(([l,k])=>`<button data-sg="${k}" aria-pressed="${S.sg===k}">${l}</button>`).join('');
+ let h='';
+ if(S.sg==='ev'){const t=today(),live=D.ev.filter(e=>e.d>=t).sort((a,b)=>a.d<b.d?-1:1).filter(e=>!S.free||e.p==='Kostenlos'),old=D.ev.filter(e=>e.d<t).length;
+  h=`<div class="row"><button class="chip${S.free?' on':''}" data-free>Nur kostenlos</button></div>`+(live.length?live.map(e=>`<div class="card ev"><span class="date"><b>${e.d.slice(8)}</b>${MON[+e.d.slice(5,7)-1]}</span><div><h3>${esc(e.t)}</h3><p class="mu">${e.o?esc(e.o)+' · ':''}${e.p} · ${e.i}<br>${e.a} · selbst vorgemerkt</p></div></div>`).join(''):`<div class="card empty"><b class="f">Noch keine Termine</b><p class="mu">Echte Termine folgen mit Veranstaltern. Bis dahin kannst du eigene vormerken. Vergangene verschwinden automatisch.</p></div>`)+(old?`<p class="mu">${old} abgelaufen, ausgeblendet.</p>`:'')+`<button class="btn dark wide" data-form="ev">+ Termin vormerken</button>`;
+ }else{
+  h=(D.tr.length?D.tr.map(r=>`<div class="card ev"><span class="date" style="font-size:26px">🥾</span><div><h3>${esc(r.t)}</h3><p class="mu">${r.l?esc(r.l)+' km':'Länge offen'} · ${r.dm?esc(r.dm)+' Min.':'Dauer offen'} · ${r.s}<br>${r.a?r.a+' · ':''}Kinderwagen: ${r.k}${r.w?' · Weg: '+r.w+' · Rundweg: '+r.rr+' · WC: '+r.x+' · Einkehr: '+r.ei+' · Alter: '+r.g:''}<br>Vorgemerkt am ${fd(r.ts)}, noch nicht veröffentlicht</p>${r.b?`<p>${esc(r.b)}</p>`:''}</div></div>`).join(''):`<div class="card empty"><b class="f">Noch keine Touren</b><p class="mu">Echte Routen mit Karte folgen. Du kannst schon eine Tour vorschlagen.</p></div>`)+`<button class="btn dark wide" data-form="tr">+ Tour vorschlagen</button>`;
+ }
+ $('eb').innerHTML=h;
+}
+function rPf(){
+ const g=(l,k,vs,m)=>`<h3 class="sh3">${l}</h3><div class="row">${vs.map(v=>`<button class="chip${(m?D.prof[k].includes(v):D.prof[k]===v)?' on':''}" data-pf="${k}" data-v="${v}">${v}</button>`).join('')}</div>`;
+ const done=[D.prof.ages.length,D.prof.stroller,D.prof.dist,D.prof.budget].filter(Boolean).length;
+ $('pf').innerHTML=`<div class="card pf"><p class="f">Profil zu ${done*25} % ausgefüllt</p><div class="bar"><i style="width:${done*25}%"></i></div>`+g('Alter der Kinder','ages',['Baby','Kleinkind','Kindergarten','Schulkind','Jugendlich'],1)+g('Kinderwagen dabei','stroller',['Ja','Nein'])+g('Wie weit fahrt ihr?','dist',['5 km','10 km','25 km','50 km'])+g('Budget','budget',['Kostenlos','Günstig','Egal'])+`</div><p class="mu note">Alles bleibt auf diesem Handy, keine Namen, keine Geburtsdaten. „Kinderwagen: Ja“ filtert nach bestätigtem Kinderwagenzugang. Die übrigen Angaben nutzen wir mit echten Ortsdaten. Die Beispielorte sind nur zum Ausprobieren.</p>`;
+}
+function rReg(){document.querySelectorAll('.rg').forEach(e=>e.innerHTML=['Köln','Kassel'].map(r=>`<button data-rg="${r}" aria-pressed="${S.r===r}">${r}</button>`).join(''))}
+function all(){rReg();rEnt();rToday();rPlan();rEr();rPf();arm()}
+let hs=0;
+function ov(on,fromPop){$('ov').classList.toggle('on',on);document.body.style.overflow=on?'hidden':'';if(!on)S.cur='';if(on&&!hs){history.pushState({o:1},'');hs=1}else if(!on&&hs&&!fromPop){hs=0;history.back()}}
+window.addEventListener('popstate',()=>{hs=0;if($('ov').classList.contains('on'))ov(false,true)});
+function keep(){if(S.cur&&$('ov').classList.contains('on')){const y=$('sh').scrollTop;place(S.cur);$('sh').scrollTop=y}}
+function show(i){ov(false);[0,1,2,3].forEach(k=>$('v'+k).classList.toggle('on',k===i));document.querySelectorAll('#nav button').forEach((b,k)=>b.setAttribute('aria-current',k===i?'page':'false'));window.scrollTo(0,0);arm()}
+function place(n){
+ const p=byN(n),[e,c]=CAT[p.c]||['📍','--sky'],sc=score(n),rv=D.rev[n]||[],rp=D.rep.filter(r=>r.p===n);S.cur=n;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><span class="bd" style="background:var(${c})">${e}</span><h2>${n}</h2><p class="mu">${p.c} · ${W[p.w]}</p>
+<div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a>${planBtn(n)}</div>
+<h3 class="sh3">Was wisst ihr über diesen Ort?</h3><p class="mu">${sc.k>=3?Math.round(sc.j/sc.k*100)+' % der bekannten Kriterien erfüllt':'Noch zu wenig Angaben'} · ${sc.k} von 6 bekannt. Unbekannt zählt nicht als „Nein“. Der Komfort-Wert ist keine Sicherheitsprüfung.</p>
+${F.map(f=>`<div class="frow"><span>${f}</span><span class="tri">${[['ja','Ja'],['unbekannt','?'],['nein','Nein']].map(([v,l])=>`<button class="${fv(n,f)===v?'s '+v:''}" data-f="${f}" data-v="${v}" data-n="${n}">${l}</button>`).join('')}</span></div>`).join('')}
+<h3 class="sh3">Bewerten</h3>
+${['Sauberkeit','Pflegezustand','Familienfreundlichkeit'].map((l,i)=>`<div class="frow"><span>${l}</span><span class="st" data-star="${i}">${[1,2,3,4,5].map(s=>`<button data-s="${s}" aria-label="${s} Sterne">★</button>`).join('')}</span></div>`).join('')}
+<button class="btn wide" data-rev>Bewertung speichern</button><p class="mu">${rv.length} von dir gespeichert${rv.length?', zuletzt '+fd(rv[rv.length-1].ts):''}</p>
+<h3 class="sh3">Problem melden</h3>
+<select id="rc"><option>Defektes Spielgerät</option><option>Glasscherben oder Müll</option><option>Vandalismus</option><option>Gefahrenstelle</option><option>Sperrung oder Baustelle</option><option>Toilette oder Wickelmöglichkeit nicht verfügbar</option><option>Sonstiges</option></select>
+<textarea id="rt" maxlength="300" placeholder="Was ist passiert?"></textarea><button class="btn wide" data-rep>Meldung speichern</button>
+${rp.map(r=>`<p class="mu">${Date.now()-r.ts>2592000000?'Veraltet':'Neu gemeldet'} · ${fd(r.ts)} · ${esc(r.c)}${r.t?': '+esc(r.t):''}</p>`).join('')}
+<p class="mu">Eine Nutzermeldung ersetzt keine behördliche Gefahrenmeldung. Alles bleibt vorerst auf diesem Handy.</p>`;
+ ov(true);S.cur=n;
+}
+function form(k){
+ const f=(l,id,t,x)=>`<label class="fld">${l}<input id="${id}" type="${t}" ${x||''}></label>`,s=(l,id,o)=>`<label class="fld">${l}<select id="${id}">${o.map(v=>`<option>${v}</option>`).join('')}</select></label>`;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>${k==='ev'?'Termin vormerken':'Tour vorschlagen'}</h2>`+(k==='ev'?f('Titel','evt','text','maxlength=80')+f('Datum','evd','date')+f('Ort','evo','text','maxlength=80')+s('Art','evk',Object.keys(EK))+s('Eintritt','evp',['Kostenlos','Kostenpflichtig'])+s('Altersgruppe','eva',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+s('Drinnen oder draußen','evi',['Drinnen','Draußen']):f('Name der Tour','trt','text','maxlength=80')+f('Länge in km','trl','number','min=0 step=0.1')+f('Dauer in Minuten','trd','number','min=0 step=5')+s('Art der Tour','tra',['Spaziergang','Wanderung','Radtour','Kinderwagenroute','Schatzsuche','Spielplatz-Hopping','Naturlehrpfad'])+s('Schwierigkeit','trs',['Leicht','Mittel','Schwer'])+s('Kinderwagentauglich','trk',['Unbekannt','Ja','Nein'])+s('Wegbeschaffenheit','trw',['Unbekannt','Asphalt','Schotter','Waldweg','Naturpfad'])+s('Rundweg','trr',['Unbekannt','Ja','Nein'])+s('Toiletten unterwegs','trx',['Unbekannt','Ja','Nein'])+s('Einkehrmöglichkeit','tre',['Unbekannt','Ja','Nein'])+s('Empfohlenes Alter','trg',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+'<label class="fld">Beschreibung<textarea id="trb" maxlength="500"></textarea></label>')+`<button class="btn dark wide" data-save="${k}">Speichern</button><p class="mu">${k==='tr'?'Vor einer Veröffentlichung prüfen wir Plausibilität, Rechte und Sicherheit. Hier gilt dein Vorschlag nur als vorgemerkt.':'Vergangene Termine werden automatisch ausgeblendet.'}</p>`;
+ S.cur='';ov(true);
+}
+const gv=i=>$(i).value.trim();
+document.addEventListener('click',e=>{
+ const t=e.target;let b;const g=a=>t.closest('['+a+']');
+ if(t===$('ov')||g('data-close')){if(!D.w0){D.w0=1;sv()}ov(false);return}
+ if(b=g('data-rg')){S.r=b.dataset.rg;S.c='Alle';S.sk=0;D.reg=S.r;sv();all();ov(false)}
+ else if(b=g('data-tab'))show(+b.dataset.tab);
+ else if(b=g('data-open'))place(b.dataset.open);
+ else if(b=g('data-plan')){const n=b.dataset.plan,i=plan.indexOf(n);if(i<0)plan.push(n);else plan.splice(i,1);sv();all();keep()}
+ else if(b=g('data-wx')){S.wx=b.dataset.wx;S.sk=0;rToday();rPlan()}
+ else if(g('data-sk')){S.sk++;rToday()}
+ else if(b=g('data-mv')){const i=+b.dataset.i,a=b.dataset.mv;if(a==='rm')plan.splice(i,1);else{const j=a==='up'?i-1:i+1;if(j>=0&&j<plan.length)[plan[i],plan[j]]=[plan[j],plan[i]]}sv();all()}
+ else if(b=g('data-sg')){S.sg=b.dataset.sg;rEr()}
+ else if(g('data-free')){S.free=!S.free;rEr()}
+ else if(b=g('data-form'))form(b.dataset.form);
+ else if(b=g('data-pf')){const k=b.dataset.pf,v=b.dataset.v;if(k==='ages'){const i=D.prof.ages.indexOf(v);if(i<0)D.prof.ages.push(v);else D.prof.ages.splice(i,1)}else D.prof[k]=D.prof[k]===v?'':v;sv();rPf();rEnt();rPlan()}
+ else if(b=g('data-f')){const n=b.dataset.n,f=b.dataset.f,v=b.dataset.v;D.feat[n]=D.feat[n]||{};if(v==='unbekannt')delete D.feat[n][f];else D.feat[n][f]=v;D.upd[n]=Date.now();sv();all();keep()}
+ else if(b=g('data-s')){const r=b.parentNode.dataset.star;S.rv[r]=+b.dataset.s;b.parentNode.querySelectorAll('button').forEach((x,i)=>x.classList.toggle('on',i<S.rv[r]))}
+ else if(g('data-rev')){const v=[0,1,2].map(i=>S.rv[i]||0);if(!v.some(x=>x))return;(D.rev[S.cur]=D.rev[S.cur]||[]).push({v,ts:Date.now()});D.upd[S.cur]=Date.now();S.rv={};sv();all();keep()}
+ else if(g('data-rep')){D.rep.push({p:S.cur,c:$('rc').value,t:gv('rt'),ts:Date.now()});D.upd[S.cur]=Date.now();sv();all();keep()}
+ else if(g('data-conf')){D.upd[S.cur]=Date.now();sv();all();keep()}
+ else if(b=g('data-age')){const a=D.age[S.cur]=D.age[S.cur]||[],v=b.dataset.age,i=a.indexOf(v);if(i<0)a.push(v);else a.splice(i,1);sv();keep()}
+ else if(b=g('data-fix')){news(D.rep[+b.dataset.fix],'Als behoben markiert');D.rep[+b.dataset.fix].fx=Date.now();D.upd[S.cur]=Date.now();sv();all();keep()}
+ else if(b=g('data-pack')){D.pack[b.dataset.pack]=b.checked;sv()}
+ else if(b=g('data-auto')){autoPlan(+b.dataset.auto);sv();all()}
+ else if(b=g('data-city'))cityForm(+b.dataset.city);
+ else if(g('data-back'))place(S.back);
+ else if(b=g('data-copy')){if(navigator.clipboard)navigator.clipboard.writeText($('ctx').textContent);b.textContent='Kopiert ✓'}
+ else if(b=g('data-cs')){const r=D.rep[+b.dataset.cs];r.fw=r.fw||Date.now();r.st=b.dataset.v;news(r,'Status '+b.dataset.v);if(r.st==='Behoben')r.fx=Date.now();D.upd[r.p]=Date.now();sv();all();cityForm(+b.dataset.cs)}
+ else if(b=g('data-cref')){D.rep[+b.dataset.cref].ref=gv('cref');sv();b.textContent='Gespeichert ✓'}
+ else if(g('data-kom'))kom();
+ else if(g('data-demo')){S.demo=!S.demo;kom()}
+ else if(b=g('data-csv')){if(navigator.clipboard)navigator.clipboard.writeText(S.csv);b.textContent='Kopiert ✓'}
+ else if(g('data-fab'))onSite();
+ else if(b=g('data-qgo')){const n=pickPlace();all();if(b.dataset.qgo==='rep')quickRep(n);else checkin(n,0)}
+ else if(g('data-loc')){const el=$('ls');el.textContent='Suche Standort …';if(navigator.geolocation)navigator.geolocation.getCurrentPosition(q=>{S.loc=q.coords.latitude.toFixed(5)+','+q.coords.longitude.toFixed(5);el.textContent='Standort angehängt ✓'},()=>{el.textContent='Standort nicht verfügbar. Beschreibe den Ort im Text.'},{timeout:9000});else el.textContent='Standort nicht verfügbar.'}
+ else if(b=g('data-qc')){S.qc=b.dataset.qc;document.querySelectorAll('[data-qc]').forEach(x=>x.classList.toggle('on',x===b))}
+ else if(b=g('data-qsave')){const er=$('qerr'),ko=$('qok');if(!S.qc){er.textContent='Bitte oben eine Art auswählen.';return}if(ko&&!ko.checked){er.textContent='Bitte bestätige die Regeln.';return}if(ko)D.ok=1;D.rep.push({p:S.qn,c:S.qc,t:gv('qt'),sid:gv('qid'),ts:Date.now(),loc:S.loc||'',ph:S.ph||'',cf:1});D.upd[S.qn]=Date.now();S.loc='';S.ph='';sv();all();if(b.dataset.qsave==='city')cityForm(D.rep.length-1);else place(S.qn)}
+ else if(b=g('data-ck')){const s=STEPS()[S.cki],v=b.dataset.ck;D.feat[S.ckn]=D.feat[S.ckn]||{};if(v==='unbekannt')delete D.feat[S.ckn][s[0]];else D.feat[S.ckn][s[0]]=v;D.upd[S.ckn]=Date.now();sv();checkin(S.ckn,S.cki+1)}
+ else if(b=g('data-ci'))checkin(b.dataset.ci,0);
+ else if(b=g('data-ef')){S.ef=S.ef===b.dataset.ef?'':b.dataset.ef;rEr()}
+ else if(b=g('data-ek')){S.ek=S.ek===b.dataset.ek?'':b.dataset.ek;rEr()}
+ else if(g('data-ex')){S.ex=!S.ex;rEr()}
+ else if(b=g('data-ta')){S.ta=S.ta===b.dataset.ta?'':b.dataset.ta;rEr()}
+ else if(b=g('data-col')){S.col=+b.dataset.col;rEr()}
+ else if(g('data-cities'))cities();
+ else if(g('data-filter'))filt();
+ else if(b=g('data-fk')){const k=b.dataset.fk;if(k==='in'||k==='out')S.io=S.io===k?'':k;else if(k==='fav')S.fav=!S.fav;else if(k==='prof')S.ag=[...D.prof.ages];else if(k.startsWith('age:')){const a=k.slice(4),i=S.ag.indexOf(a);if(i<0)S.ag.push(a);else S.ag.splice(i,1)}else S.ff=S.ff.includes(k)?S.ff.filter(x=>x!==k):[...S.ff,k];rEnt();filt()}
+ else if(g('data-fdone'))ov(false);
+ else if(b=g('data-fav')){const n=b.dataset.fav,i=D.fav.indexOf(n);if(i<0)D.fav.push(n);else D.fav.splice(i,1);sv();all()}
+ else if(b=g('data-seen')){D.rep[+b.dataset.seen].seen=Date.now();D.upd[S.cur]=Date.now();sv();all();keep()}
+ else if(b=g('data-wnext'))welcome(+b.dataset.wnext);
+ else if(g('data-wdone')){D.w0=1;sv();ov(false);all()}
+ else if(b=g('data-wp')){const k=b.dataset.wp,v=b.dataset.v;if(k==='ages'){const i=D.prof.ages.indexOf(v);if(i<0)D.prof.ages.push(v);else D.prof.ages.splice(i,1)}else D.prof[k]=D.prof[k]===v?'':v;sv();rPf();welcome(2)}
+ else if(g('data-mydata'))mydata();
+ else if(b=g('data-export')){if(navigator.clipboard)navigator.clipboard.writeText(JSON.stringify(D));b.textContent='Kopiert ✓'}
+ else if(b=g('data-wipe')){if(b.dataset.w){try{localStorage.removeItem('fs_data');localStorage.removeItem('fs_plan')}catch(e){}location.reload()}else{b.dataset.w=1;b.textContent='Wirklich alles löschen? Nochmal tippen'}}
+ else if(g('data-legal'))legal();
+ else if(g('data-cf3')){S.cf3=!S.cf3;kom()}
+ else if(g('data-reset')){S.c='Alle';S.io='';S.ff=[];S.fav=false;S.ag=[];S.q='';$('sq').value='';rEnt();if($('ov').classList.contains('on'))filt()}
+ else if(g('data-share'))share();
+ else if(b=g('data-save')){
+  if(b.dataset.save==='ev'){if(!gv('evt')||!gv('evd'))return;D.ev.push({t:gv('evt'),d:gv('evd'),o:gv('evo'),k:gv('evk'),p:gv('evp'),a:gv('eva'),i:gv('evi')})}
+  else{if(!gv('trt'))return;D.tr.push({t:gv('trt'),l:gv('trl'),dm:gv('trd'),s:gv('trs'),k:gv('trk'),a:gv('tra'),w:gv('trw'),rr:gv('trr'),x:gv('trx'),ei:gv('tre'),g:gv('trg'),b:gv('trb'),ts:Date.now()})}
+  sv();rEr();ov(false)}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')ov(false)});
+const stat=n=>{const t=D.upd[n];if(!t)return['none','Noch nicht geprüft'];const d=(Date.now()-t)/864e5;return d<=14?['ok','Kürzlich bestätigt']:d<=90?['old','Länger nicht überprüft']:['old','Möglicherweise veraltet']};
+const openRep=n=>D.rep.filter(r=>r.p===n&&!r.fx&&Date.now()-r.ts<2592000000).length;
+const badges=n=>{const[c,l]=stat(n),k=openRep(n)+Z.filter(([z])=>fv(n,z)==='ja').length;return rt(n)+`<span class="st2 ${c}">${l}</span>`+(k?`<span class="st2 warn">⚠ ${k} Problem${k>1?'e':''}</span>`:'')+(D.prof.stroller==='Ja'?(fv(n,'Kinderwagenzugang')==='ja'?'<span class="st2 ok">🚼 Kinderwagen ok</span>':fv(n,'Kinderwagenzugang')==='nein'?'<span class="st2 warn">Kein Kinderwagenzugang</span>':''):'')};
+const mm=t=>('0'+Math.floor(t/60)%24).slice(-2)+':'+('0'+t%60).slice(-2);
+const sched=()=>{let cur=D.t0.split(':').reduce((a,b)=>a*60+ +b,0);const items=plan.map((n,i)=>{const p=byN(n),d=D.pd[n]||DUR[p.c]||60,s=cur;cur+=d+D.buf;return{n,p,d,s,e:s+d,i}});return{items,end:items.length?items[items.length-1].e:0}};
+const pack=()=>{const a=D.prof.ages,x=['Trinkflasche','Snacks'];if(S.wx==='Regen')x.push('Regenjacke','Wechselkleidung');else if(S.wx==='Sonnig')x.push('Sonnencreme','Sonnenhut');else x.push('Jacke für alle Fälle');if(a.includes('Baby')||a.includes('Kleinkind'))x.push('Wickeltasche','Feuchttücher','Ersatzkleidung');if(D.prof.stroller==='Ja')x.push('Kinderwagen');if(a.includes('Kleinkind')||a.includes('Kindergarten'))x.push('Lieblingsspielzeug');return[...new Set(x)]};
+function autoPlan(h){const L=P.filter(p=>p.r===S.r&&(S.wx==='Regen'?p.w==='in':S.wx==='Sonnig'?p.w!=='in':true)).sort((a,b)=>((a.w==='in')-(b.w==='in'))||(DUR[a.c]-DUR[b.c]));let t=0;plan=[];L.forEach(p=>{const d=D.pd[p.n]||DUR[p.c]||60;if(plan.length<4&&t+d<=h*60){plan.push(p.n);t+=d+D.buf}})}
+function share(){const{items,end}=sched();const tx='Unser Ausflug in '+S.r+'\n'+items.map(x=>mm(x.s)+' '+x.n).join('\n')+'\nEnde ca. '+mm(end)+'\n'+route();if(navigator.share)navigator.share({title:'FamilySpot',text:tx}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(tx)}
+function rPlan(){
+ const{items,end}=sched(),tot=items.reduce((a,x)=>a+x.d,0),nap=D.nap==='12:00–14:00'?[720,840]:D.nap==='13:00–15:00'?[780,900]:null,hit=nap&&items.some(x=>x.s<nap[1]&&x.e>nap[0]);
+ const dl=v=>v>=60?String(v/60).replace('.',',')+' Std.':v+' Min.';
+ const ctl=`<div class="card pf"><p class="f">Tag planen</p><div class="ctl"><label class="fld">Start<input type="time" id="t0" value="${D.t0}"></label><label class="fld">Fahrzeit dazwischen<select id="buf">${[10,20,30,45].map(v=>`<option value="${v}"${D.buf===v?' selected':''}>${v} Min.</option>`).join('')}</select></label></div><label class="fld">Mittagsschlaf (Baby oder Kleinkind)<select id="nap">${['Kein Schlaf','12:00–14:00','13:00–15:00'].map(v=>`<option${D.nap===v?' selected':''}>${v}</option>`).join('')}</select></label><div class="acts"><button class="btn" data-auto="3">Halbtag vorschlagen</button><button class="btn" data-auto="6">Ganztag vorschlagen</button></div><p class="mu">Der Vorschlag passt zu Region und Wetter. Die Dauer pro Ort ist eine Schätzung, du kannst sie ändern. Echte Fahrzeiten zeigt Google Maps bei „Route“.</p></div>`;
+ const tl=items.length?`<ol class="tl">${items.map(x=>`<li><span class="num">${x.i+1}</span><div><b>${x.n}</b><span class="mu tm">${mm(x.s)} bis ${mm(x.e)}</span><select data-dur="${x.n}" aria-label="Dauer">${[30,45,60,90,120,150,180,240].map(v=>`<option value="${v}"${x.d===v?' selected':''}>${dl(v)}</option>`).join('')}</select></div><span class="mv"><button data-mv="up" data-i="${x.i}" aria-label="Nach oben">↑</button><button data-mv="dn" data-i="${x.i}" aria-label="Nach unten">↓</button><button data-mv="rm" data-i="${x.i}" aria-label="Entfernen">✕</button></span></li>`).join('')}</ol><p class="mu">Ende ca. ${mm(end)} Uhr · ${dl(tot)} Programm</p><div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${route()}">Route in Google Maps</a><button class="btn" data-share>Teilen</button></div><p style="margin:20px 0 14px"><span class="sign out">${S.r}</span> <span class="mu">Ausflug geschafft!</span></p>`:`<div class="card empty"><b class="f">Noch nichts geplant</b><p class="mu">Lass dir oben einen Vorschlag machen oder tippe bei einem Ort auf „+ Zum Tag“.</p><button class="btn dark" data-tab="0">Orte entdecken</button></div>`;
+ const pk=`<div class="card pf"><p class="f">Packliste</p><p class="mu">Passt zu Wetter und Profil.</p>${pack().map(k=>`<label class="pk"><input type="checkbox" data-pack="${k}"${D.pack[k]?' checked':''}>${k}</label>`).join('')}</div>`;
+ $('plan').innerHTML=ctl+(hit?'<p class="st2 warn">⚠ Der Plan überschneidet sich mit dem Mittagsschlaf. Starte früher oder plane die Fahrt in die Schlafenszeit.</p>':'')+tl+pk;
+}
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.dur){D.pd[t.dataset.dur]=+t.value;sv();rPlan()}else if(t.id==='t0'&&t.value){D.t0=t.value;sv();rPlan()}else if(t.id==='buf'){D.buf=+t.value;sv();rPlan()}else if(t.id==='nap'){D.nap=t.value;sv();rPlan()}});
+function place(n){
+ const p=byN(n),[e,c]=CAT[p.c]||['📍','--sky'],sc=score(n),rv=D.rev[n]||[],rp=D.rep.filter(r=>r.p===n),ag=D.age[n]||[];S.cur=n;
+ const row=(f,t,bad)=>`<div class="frow"><span>${t}</span><span class="tri">${[['ja','Ja'],['unbekannt','?'],['nein','Nein']].map(([v,l])=>`<button class="${fv(n,f)===v?'s '+v+(bad?' bad':''):''}" data-f="${f}" data-v="${v}" data-n="${n}">${l}</button>`).join('')}</span></div>`;
+ const nr=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' '+p.q);
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><span class="bd" style="background:var(${c})">${e}</span><h2><span class="sign">${n}</span></h2><p class="mu">${p.c} · ${W[p.w]}</p>
+<div>${badges(n)}</div><p class="mu">${D.upd[n]?'Zuletzt bestätigt oder geändert: '+fd(D.upd[n]):'Noch nicht von der Community geprüft.'} Das ist keine amtliche Prüfung.</p>
+<div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a>${planBtn(n)}<button class="btn" data-conf>✓ Stand heute bestätigen</button><button class="btn" data-ci="${n}">✅ Check-in vor Ort</button></div>
+<h3 class="sh3">Zustand: Was ist kaputt?</h3><p class="mu">Antworte nur, was du selbst gesehen hast. Bei akuter Gefahr melde es zusätzlich der Stadt.</p>${Z.map(([k,t])=>row(k,t,1)).join('')}
+<h3 class="sh3">Ausstattung</h3><p class="mu">${sc.k>=3?Math.round(sc.j/sc.k*100)+' % der bekannten Punkte vorhanden':'Noch zu wenig Angaben'} · ${sc.k} von ${F.length} bekannt. Unbekannt zählt nicht als „Nein“. Der Wert ist keine Sicherheitsprüfung.</p>${F.map(f=>row(f,f)).join('')}
+<h3 class="sh3">In der Nähe</h3>${N.map(([k,t])=>row(k,t)).join('')}
+<div class="acts"><a class="btn" target="_blank" rel="noopener" href="${nr('öffentliche Toilette')}">🚻 Toiletten suchen</a><a class="btn" target="_blank" rel="noopener" href="${nr('Wickelraum')}">🍼 Wickelräume suchen</a></div>
+<h3 class="sh3">Geeignet für</h3><div class="row">${AGES.map(a=>`<button class="chip${ag.includes(a)?' on':''}" data-age="${a}">${a}</button>`).join('')}</div>
+<h3 class="sh3">Bewerten</h3>
+${['Sauberkeit','Pflegezustand','Familienfreundlichkeit'].map((l,i)=>`<div class="frow"><span>${l}</span><span class="st" data-star="${i}">${[1,2,3,4,5].map(s=>`<button data-s="${s}" aria-label="${s} Sterne">★</button>`).join('')}</span></div>`).join('')}
+<button class="btn wide" data-rev>Bewertung speichern</button><p class="mu">${rv.length} von dir gespeichert${rv.length?', zuletzt '+fd(rv[rv.length-1].ts):''}</p>
+<h3 class="sh3">Problem melden</h3>
+<select id="rc"><option>Defektes Spielgerät</option><option>Glasscherben</option><option>Müll</option><option>Vandalismus</option><option>Gefahrenstelle</option><option>Zaun beschädigt</option><option>Sperrung oder Baustelle</option><option>Toilette oder Wickelmöglichkeit nicht verfügbar</option><option>Sonstiges</option></select>
+<textarea id="rt" maxlength="300" placeholder="Was ist passiert, wo genau?"></textarea><button class="btn wide" data-rep>Meldung speichern</button>
+${rp.map(r=>`<p class="mu">${r.fx?'Als behoben gemeldet':Date.now()-(r.seen||r.ts)>2592000000?'Veraltet':(r.cf||1)>=3?'Bestätigt':'Neu gemeldet'} · ${r.cf||1}/3 Bestätigungen · ${fd(r.ts)} · ${esc(r.c)}${r.t?': '+esc(r.t):''} ${r.fx?'':`<button class="chip" data-fix="${D.rep.indexOf(r)}">Ist behoben</button>`} ${r.fx?'':`<button class="chip" data-seen="${D.rep.indexOf(r)}">Noch immer so</button>`} <button class="chip" data-city="${D.rep.indexOf(r)}">${r.fw?'Stadt-Status':'🏛️ An Stadt melden'}</button>${r.fw?` · An Stadt: ${r.st}${r.ref?' ('+esc(r.ref)+')':''}`:''}</p>${r.ph?`<img class="rph" src="${r.ph}" alt="Foto zur Meldung">`:''}`).join('')}
+<p class="mu">Eine Nutzermeldung ersetzt keine behördliche Gefahrenmeldung. Alles bleibt vorerst auf diesem Handy.</p>`;
+ ov(true);S.cur=n;
+}
+const CITY={'Köln':{n:'Stadt Köln',u:'https://sags-uns.stadt-koeln.de',u2:'https://www.stadt-koeln.de/service/onlinedienste/spielplaetze-koeln/index.html',h:'Köln hat „Sag’s uns“ für Mängel im Stadtbild und ein eigenes Formular für Spiel- und Bolzplätze. Dort fragt die Stadt die Spielplatznummer vom Schild vor Ort ab.'},'Kassel':{n:'Stadt Kassel',u:'https://www.google.com/search?q='+encodeURIComponent('Stadt Kassel Mängelmelder'),h:'Das offizielle Meldeportal der Stadt Kassel hinterlegen wir bei der Anbindung. Bis dahin findest du es über die Suche.'},'Bonn':{n:'Bundesstadt Bonn',u:'https://anliegen.bonn.de',h:'Bonn hat einen Mängelmelder unter anliegen.bonn.de mit der Kategorie „Stadtbild und Grün“, dort gehören auch defekte Spielgeräte hin. Eine E-Mail-Adresse für Rückfragen ist dort wichtig.'},'München':{n:'Landeshauptstadt München',u:'https://stadt.muenchen.de/infos/spielen-muenchen.html',h:'München hat eine eigene Spielplatz-App mit Online-Formular für Schäden. Die Seite der Stadt führt dich dorthin.'}};
+const DEMO=[['Karlsaue','Defektes Spielgerät',9,'An Stadt gemeldet'],['Rheinpark Köln','Glasscherben',4,'In Bearbeitung'],['Bergpark Wilhelmshöhe','Zaun beschädigt',21,'Behoben'],['Kölner Zoo','Müll',2,'Neu (Nutzer)'],['Flora und Botanischer Garten','Vandalismus',13,'An Stadt gemeldet']].map(([p,c,d,st],i)=>({p,c,ts:Date.now()-d*864e5,st,cf:[4,2,3,1,3][i]}));
+function cityForm(i){
+ const r=D.rep[i],p=byN(r.p),C=CITY[p.r]||{n:'Stadt '+p.r,u:'https://www.google.com/search?q='+encodeURIComponent('Stadt '+p.r+' Mängelmelder'),h:'Das offizielle Meldeportal dieser Stadt hinterlegen wir bei der Anbindung. Bis dahin findest du es über die Suche.'};S.back=r.p;S.cur='';
+ const tx=`Meldung über FamilySpot\nOrt: ${p.n} (${p.r})\nKarte: ${r.loc?'https://www.google.com/maps?q='+r.loc:rl(p)}\nKategorie: ${r.c}${r.sid?'\nNummer vor Ort: '+r.sid:''}\nBeschreibung: ${r.t||'–'}\nGemeldet am: ${fd(r.ts)}\nHinweis: Meldung einer Privatperson, bitte vor Ort prüfen.`;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><button class="chip" data-back>‹ Zurück</button><h2>Meldung an ${C.n}</h2><p class="mu">So kommt der Schaden zur Verwaltung: Wir bereiten den Text vor, du schickst ihn über den offiziellen Weg ab. ${C.h}</p>
+<div class="card pad2"><pre class="pre" id="ctx">${esc(tx)}</pre></div>${r.ph?`<img class="rph" src="${r.ph}" alt="Foto zur Meldung"><p class="mu">Das Foto hängst du im Portal oder in der E-Mail selbst an. Halte das Bild gedrückt, um es zu speichern.</p>`:''}
+<div class="acts"><button class="btn dark" data-copy="${i}">Text kopieren</button><a class="btn" target="_blank" rel="noopener" href="${C.u}">Offizielles Portal</a>${C.u2?`<a class="btn" target="_blank" rel="noopener" href="${C.u2}">Spielplatz-Formular</a>`:''}<a class="btn" href="mailto:?subject=${encodeURIComponent('Schadensmeldung: '+p.n)}&body=${encodeURIComponent(tx)}">E-Mail-Entwurf</a></div>
+<h3 class="sh3">Habt ihr es gemeldet?</h3><div class="row">${['An Stadt gemeldet','In Bearbeitung','Behoben','Abgelehnt'].map(s=>`<button class="chip${r.fw&&r.st===s?' on':''}" data-cs="${i}" data-v="${s}">${s}</button>`).join('')}</div>
+<label class="fld">Vorgangsnummer der Stadt (optional)<input id="cref" value="${esc(r.ref||'')}" maxlength="40"></label><button class="btn wide" data-cref="${i}">Nummer speichern</button>
+<p class="mu">Das ist ein Prototyp: Die direkte Übermittlung an die Verwaltung per Schnittstelle kommt, sobald eine Stadt mitmacht. Bei akuter Gefahr oder Verletzten bitte sofort 112 rufen.</p>`;ov(true);
+}
+function kom(){
+ let R=[...D.rep.map(r=>({p:r.p,c:r.c,ts:r.ts,cf:r.cf||1,st:r.fx?'Behoben':r.fw?r.st:'Neu (Nutzer)'})),...(S.demo?DEMO:[])];if(S.cf3)R=R.filter(r=>r.cf>=3);
+ const open=R.filter(r=>r.st!=='Behoben'),fw=R.filter(r=>r.st!=='Neu (Nutzer)'),cat={};R.forEach(r=>cat[r.c]=(cat[r.c]||0)+1);
+ const mx=Math.max(1,...Object.values(cat)),age=open.length?Math.round(open.reduce((a,r)=>a+(Date.now()-r.ts)/864e5,0)/open.length):0;
+ S.csv='Ort;Kategorie;Datum;Status\n'+R.map(r=>[r.p,r.c,new Date(r.ts).toLocaleDateString('de-DE'),r.st].join(';')).join('\n');S.cur='';
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Für Städte und Kommunen</h2><p class="mu">So sieht eine Verwaltung die Meldungen aus Familien: gesammelt, nach Art sortiert, mit Alter und Status. Die Vorschau zeigt deine eigenen Meldungen. Ab 3 Bestätigungen durch verschiedene Konten gilt eine Meldung als bestätigt, das filtert Fehlmeldungen.</p>
+<div class="row"><button class="chip${S.demo?' on':''}" data-demo>Beispieldaten für die Vorführung</button><button class="chip${S.cf3?' on':''}" data-cf3>Nur bestätigte (ab 3)</button></div>
+<div class="og g3"><div class="opt"><b>${R.length}</b>Meldungen</div><div class="opt"><b>${open.length}</b>offen</div><div class="opt"><b>${R.length-open.length}</b>behoben</div></div>
+<p class="mu">${fw.length} an die Stadt weitergegeben · im Schnitt ${age} Tage offen</p>
+<h3 class="sh3">Nach Art</h3>${Object.entries(cat).map(([k,v])=>`<div class="frow"><span>${esc(k)}</span><span class="mu">${v}</span></div><div class="bar"><i style="width:${v/mx*100}%;background:var(--cor)"></i></div>`).join('')||'<p class="mu">Noch keine Meldungen. Schalte die Beispieldaten ein, um die Vorschau zu sehen.</p>'}
+<h3 class="sh3">Alle Meldungen</h3>${R.map(r=>`<p class="mu"><b>${esc(r.p)}</b> · ${esc(r.c)} · ${fd(r.ts).split(' ')[0]} · ${r.st} · ${r.cf}/3 ✓</p>`).join('')}
+<button class="btn wide dark" data-csv>Tabelle kopieren (CSV)</button>
+<p class="mu">Anbindung: Export, Schnittstelle zum Meldesystem der Stadt (z. B. Open311) oder ein eigenes Verwaltungs-Dashboard. Welcher Weg passt, klären wir pro Stadt.</p>`;ov(true);
+}
+const contrib=()=>Object.values(D.feat).reduce((a,o)=>a+Object.keys(o).length,0)+Object.values(D.rev).reduce((a,v)=>a+v.length,0)+D.rep.length+Object.keys(D.upd).length;
+function rPf(){
+ const Q=D.prof,o=(k,v,e,m)=>`<button class="opt${(m?Q[k].includes(v):Q[k]===v)?' on':''}" data-pf="${k}" data-v="${v}"><b>${e}</b>${v}</button>`;
+ const done=[Q.ages.length,Q.stroller,Q.dist,Q.budget].filter(Boolean).length,n=contrib();
+ $('pf').innerHTML=`<div class="card pfh"><h2>Hallo, Familie! 👋</h2><p>Erzählt uns kurz, wer dabei ist. Dann passen wir Vorschläge, Filter und Packliste an.</p><div class="bar"><i style="width:${done*25}%"></i></div><p style="margin:0;font-weight:800">${done===4?'Alles ausgefüllt, super!':done+' von 4 Fragen beantwortet'}</p></div>
+<h3 class="sh3">Wer ist dabei?</h3><div class="og g3">${[['Baby','🍼'],['Kleinkind','🧸'],['Kindergarten','🎨'],['Schulkind','🎒'],['Jugendlich','🛹']].map(([v,e])=>o('ages',v,e,1)).join('')}</div>
+<h3 class="sh3">Kinderwagen dabei?</h3><div class="og g2">${o('stroller','Ja','🚼')}${o('stroller','Nein','🚶')}</div>
+<h3 class="sh3">Wie weit fahrt ihr?</h3><div class="og g2">${[['5 km','🚲'],['10 km','🚌'],['25 km','🚗'],['50 km','🛣️']].map(([v,e])=>o('dist',v,e)).join('')}</div>
+<h3 class="sh3">Budget</h3><div class="og g3">${[['Kostenlos','🆓'],['Günstig','💶'],['Egal','🎟️']].map(([v,e])=>o('budget',v,e)).join('')}</div>
+${D.news.length?`<div class="card pad2"><p class="f" style="font-size:19px">Neuigkeiten zu euren Meldungen</p>${D.news.slice(0,4).map(x=>`<p class="mu">${fd(x.ts)} · ${esc(x.t)}</p>`).join('')}</div>`:''}<div class="card pad2"><p class="f" style="font-size:19px">Eure Beiträge</p><p class="mu">${n} Angaben, Bewertungen und Meldungen. Je mehr ihr teilt, desto besser für alle Familien.</p><div class="og g2">${[['🧭','Entdecker',1],['🛍','Spielplatz-Scout',8],['🤝','Familienhelfer',20],['🏛️','Stadt-Melder',-1]].map(([e,l,t])=>{const on=t<0?D.rep.some(r=>r.fw):n>=t;return `<div class="opt bdg${on?' on':''}"><b>${e}</b>${l}<small>${on?'Freigeschaltet':t<0?'Meldung an Stadt':'ab '+t+' Beiträgen'}</small></div>`}).join('')}</div></div>
+<div class="card pad2" style="background:var(--sky);color:#1B1740"><p class="f" style="font-size:19px">Für Städte und Kommunen</p><p>So kommen Schäden direkt bei der Verwaltung an: Vorschau der Meldeübersicht.</p><button class="btn dark" data-kom>Vorschau öffnen</button></div>
+<div class="card pad2"><p class="f" style="font-size:19px">Regeln und Rechtliches</p><p class="mu">Community-Regeln, Datenschutz und Impressum (Entwurf).</p><button class="btn" data-legal>Lesen</button></div>
+<div class="card pad2"><p class="f" style="font-size:19px">Meine Daten</p><p class="mu">Exportieren oder alles löschen.</p><button class="btn" data-mydata>Öffnen</button></div>
+<p class="mu note">Alles bleibt auf diesem Handy, keine Namen, keine Geburtsdaten. „Kinderwagen: Ja“ zeigt euch bei jedem Ort, ob der Kinderwagenzugang bestätigt ist. Die Beispielorte sind nur zum Ausprobieren.</p>`;
+}
+const EK={Fest:'🎉',Markt:'🛍️',Flohmarkt:'🧺',Workshop:'✂️',Theater:'🎭',Sport:'⚽',Natur:'🌲',Ferienprogramm:'🏖️'};
+const TK={Kinderwagenroute:'🚼',Spaziergang:'🚶',Wanderung:'🥾',Radtour:'🚲',Schatzsuche:'🗺️',Naturlehrpfad:'🌿'};
+const addD=n=>{const d=new Date(Date.now()+n*864e5);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)};
+const EX=[{t:'Kinderflohmarkt im Veedel',k:'Flohmarkt',n:6,o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Puppentheater für die Kleinen',k:'Theater',n:9,o:'Kassel',p:'Kostenpflichtig',a:'Kindergarten',i:'Drinnen'},{t:'Basteln mit Naturmaterial',k:'Workshop',n:12,o:'Köln',p:'Kostenlos',a:'Schulkind',i:'Drinnen'},{t:'Familien-Schwimmtag',k:'Sport',n:14,o:'Köln',p:'Kostenpflichtig',a:'Alle Altersgruppen',i:'Drinnen'},{t:'Familien-Waldtag',k:'Natur',n:16,o:'Kassel',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Laternenumzug für Familien',k:'Fest',n:20,o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Kinder-Winterfest',k:'Fest',n:24,o:'Kassel',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Ferienprogramm Naturerlebnis',k:'Ferienprogramm',n:30,o:'Kassel',p:'Kostenpflichtig',a:'Schulkind',i:'Draußen'}].map(e=>({...e,d:addD(e.n),ex:1}));
+const TX=[{t:'Rheinpark-Runde',r:'Köln',a:'Kinderwagenroute',s:'Leicht',k:'Ja',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Alle Altersgruppen',q:'Rheinpark Köln'},{t:'Entdeckerweg im Forstbotanischen Garten',r:'Köln',a:'Naturlehrpfad',s:'Leicht',k:'Unbekannt',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Schulkind',q:'Forstbotanischer Garten Köln'},{t:'Spaziergang durch die Karlsaue',r:'Kassel',a:'Spaziergang',s:'Leicht',k:'Ja',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Alle Altersgruppen',q:'Karlsaue Kassel'},{t:'Bergpark: Wasserspiele-Weg',r:'Kassel',a:'Wanderung',s:'Mittel',k:'Unbekannt',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Schulkind',q:'Bergpark Wilhelmshöhe Kassel'}];
+const COLS=[['☔','Regentag-Ideen',p=>p.w==='in'],['☀️','Draußen-Tipps',p=>p.w==='out'],['🦒','Tiere und Zoo',p=>p.c==='Tierpark'],['🌳','Natur und Parks',p=>p.c==='Park'],['🔬','Wissen und Museen',p=>p.c==='Museum'||p.c==='Erlebniswelt'],['🏊','Baden und Therme',p=>p.c==='Bad']];
+function rEr(){
+ S.ef=S.ef||'';S.ek=S.ek||'';S.ta=S.ta||'';if(S.ex===undefined)S.ex=true;
+ $('sg').innerHTML=[['Termine','ev'],['Touren','tr'],['Sammlungen','co']].map(([l,k])=>`<button data-sg="${k}" aria-pressed="${S.sg===k}">${l}</button>`).join('');
+ const ch=(a,k,l,on)=>`<button class="chip${on?' on':''}" data-${a}="${k}">${l}</button>`;let h='';
+ if(S.sg==='ev'){
+  const t=today(),evs=[...D.ev,...(S.ex?(['Köln','Kassel'].includes(S.r)?EX.filter(e=>e.o===S.r):EX.slice(0,5).map(e=>({...e,o:S.r}))):[])];
+  let live=evs.filter(e=>e.d>=t).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);
+  if(S.ef==='Kostenlos')live=live.filter(e=>e.p==='Kostenlos');else if(S.ef)live=live.filter(e=>e.i===S.ef);
+  if(S.ek)live=live.filter(e=>(e.k||'Fest')===S.ek);
+  const old=D.ev.filter(e=>e.d<t).length;
+  h=`<div class="sc">${['Kostenlos','Drinnen','Draußen'].map(x=>ch('ef',x,x,S.ef===x)).join('')}${Object.keys(EK).map(x=>ch('ek',x,EK[x]+' '+x,S.ek===x)).join('')}</div><div class="row">${ch('ex','1','Beispiel-Termine zeigen',S.ex)}</div>${S.ex?'<p class="mu">Beispiele zeigen nur, wie dieser Bereich später aussieht. Es sind keine echten Veranstaltungen.</p>':''}`+(live.length?live.map(e=>`<div class="card ev"><span class="date"><b>${e.d.slice(8)}</b>${MON[+e.d.slice(5,7)-1]}</span><div><h3>${EK[e.k||'Fest']} ${esc(e.t)}</h3><p class="mu">${e.o?esc(e.o)+' · ':''}${e.p} · ${e.i}<br>${e.a}</p><span class="st2 ${e.ex?'old':'none'}">${e.ex?'Beispiel':'Selbst vorgemerkt'}</span></div></div>`).join(''):`<div class="card empty"><b class="f">Nichts gefunden</b><p class="mu">Lockere die Filter oder merke dir selbst einen Termin vor. Vergangene Termine verschwinden automatisch.</p></div>`)+(old?`<p class="mu">${old} abgelaufen, ausgeblendet.</p>`:'')+`<button class="btn dark wide" data-form="ev">+ Termin vormerken</button>`;
+ }else if(S.sg==='tr'){
+  const arts=Object.keys(TK);
+  let L=[...D.tr.map(r=>({t:r.t,a:r.a||'Spaziergang',s:r.s,k:r.k,w:r.w,rr:r.rr,x:r.x,ei:r.ei,g:r.g||'Alle Altersgruppen',l:r.l,dm:r.dm,own:1,q:r.t+' '+S.r})),...(S.ex?TX.filter(x=>x.r===S.r):[])];
+  if(S.ta)L=L.filter(x=>x.a===S.ta);
+  h=`<div class="sc">${arts.map(a=>ch('ta',a,TK[a]+' '+a,S.ta===a)).join('')}</div>`+(L.length?L.map(x=>`<div class="card tour"><h3>${TK[x.a]||'🥾'} ${esc(x.t)}</h3><p class="mu">${S.r}${x.l?' · '+esc(x.l)+' km':''}${x.dm?' · '+esc(x.dm)+' Min.':''}</p><div class="row">${[['Schwierigkeit',x.s],['Kinderwagen',x.k],['Weg',x.w],['Rundweg',x.rr],['WC unterwegs',x.x],['Einkehr',x.ei],['Alter',x.g]].map(([l,v])=>`<span class="st2 ${!v||v==='Unbekannt'?'none':v==='Nein'?'warn':'ok'}">${l}: ${esc(v||'Unbekannt')}</span>`).join('')}</div><div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.q)}">Im Kartendienst öffnen</a></div><span class="st2 ${x.own?'none':'old'}">${x.own?'Vorgemerkt, nicht geprüft':'Beispiel, ungeprüft'}</span></div>`).join(''):`<div class="card empty"><b class="f">Keine Touren</b><p class="mu">Schlag selbst eine Tour vor. Vor einer Veröffentlichung prüfen wir sie.</p></div>`)+`<button class="btn dark wide" data-form="tr">+ Tour vorschlagen</button>`;
+ }else{
+  const f=S.col>=0?COLS[S.col]:null;
+  h=f?`<button class="chip" data-col="-1">‹ Alle Sammlungen</button><h3 class="sh3">${f[0]} ${f[1]}</h3>`+P.filter(p=>p.r===S.r&&f[2](p)).map(card).join(''):`<p class="mu">Fertig sortierte Ideen für ${S.r} und Umgebung. Sie wachsen mit den Orten.</p><div class="og g2">${COLS.map(([e,l,fn],i)=>`<button class="opt" data-col="${i}"><b>${e}</b>${l}<small class="mu">${P.filter(p=>p.r===S.r&&fn(p)).length} Orte</small></button>`).join('')}</div>`;
+ }
+ $('eb').innerHTML=h;
+}
+const QC=[['🛝','Defektes Spielgerät'],['🪟','Glasscherben'],['🗑️','Müll'],['🎨','Vandalismus'],['⚠️','Gefahrenstelle'],['🚧','Zaun oder Sperrung'],['🚻','Toilette fehlt oder defekt'],['➕','Sonstiges']];
+const Q={Zaun:'Ist der Ort umzäunt?',Schatten:'Gibt es Schatten?',Sitzgelegenheiten:'Gibt es Sitzgelegenheiten?',Toilette:'Gibt es eine Toilette am Ort?',Wickeltisch:'Gibt es einen Wickeltisch?',Trinkwasser:'Gibt es Trinkwasser?',Kinderwagenzugang:'Ist der Zugang kinderwagentauglich?',Parkplatz:'Gibt es Parkplätze in der Nähe?',Rollstuhlgerecht:'Ist der Ort rollstuhlgerecht (stufenfrei, breite Wege)?'};
+const STEPS=()=>[...Z.map(([k,t])=>[k,t,1]),...F.map(f=>[f,Q[f],0]),...N.map(([k,t])=>[k,t,0])];
+function onSite(){
+ const L=P.filter(p=>p.r===S.r);
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Ihr seid vor Ort?</h2><p class="mu">Wähle den Ort. Danach meldest du ein Problem oder machst den 30-Sekunden-Check. Beides hilft anderen Familien.</p>
+<label class="fld">Ort in ${S.r}<select id="qp">${L.map(p=>`<option${p.n===S.lastp?' selected':''}>${p.n}</option>`).join('')}</select></label>
+<label class="fld">Ort fehlt? Name eintragen, z. B. Spielplatz an der Schulstraße<input id="qn" maxlength="80"></label>
+<button class="btn" data-loc>📍 Standort anhängen</button> <span class="mu" id="ls">${S.loc?'Standort angehängt ✓':''}</span>
+<div class="og g2" style="margin-top:16px"><button class="opt" data-qgo="rep"><b>⚠️</b>Problem melden</button><button class="opt" data-qgo="ck"><b>✅</b>Check-in<small class="mu">30 Sekunden</small></button></div>
+<p class="mu">Den Standort fragt dein Handy vorher ab. Er wird nur an die Meldung gehängt.</p>`;ov(true);S.cur='';
+}
+function pickPlace(){const nm=gv('qn');let n=$('qp').value;if(nm){n=nm;if(!byN(n)){const o={r:S.r,n,c:'Spielplatz',w:'out',q:S.loc||n+' '+S.r,custom:1};P.push(o);D.cust.push(o);sv()}}S.lastp=n;return n}
+function quickRep(n){
+ S.qn=n;S.qc='';S.ph='';
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><button class="chip" data-fab>‹ Zurück</button><h2>Was ist los?</h2><p class="mu">${esc(n)}</p><div class="og g2">${QC.map(([e,l])=>`<button class="opt" data-qc="${l}"><b>${e}</b>${l}</button>`).join('')}</div><textarea id="qt" maxlength="300" placeholder="Was genau, wo auf dem Gelände? (optional)"></textarea><input id="qid" maxlength="40" placeholder="Nummer oder Schildtext vor Ort (falls vorhanden)" aria-label="Nummer oder Schildtext"><label class="btn wide" style="cursor:pointer">📷 Foto hinzufügen<input type="file" accept="image/*" capture="environment" id="qph" hidden></label><img id="qpv" alt="Vorschau" style="display:none;max-width:100%;border-radius:12px;margin-top:8px"><p class="mu">Bitte keine Personen oder Kinder fotografieren. Standortdaten im Foto werden entfernt.</p>${D.ok?'':`<label class="pk"><input type="checkbox" id="qok">Ich habe die Regeln gelesen: nur Selbstgesehenes, keine Personen oder Kinder fotografiert.</label><button class="chip" data-legal>Regeln lesen</button>`}<p class="mu" id="qerr" role="alert"></p><button class="btn dark wide" data-qsave="own">Meldung speichern</button><button class="btn wide" data-qsave="city">Speichern und an Stadt melden</button>`;ov(true);S.cur='';
+}
+function checkin(n,i){
+ S.ckn=n;S.cki=i;const st=STEPS();
+ if(i>=st.length){$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Danke! 🎉</h2><p class="mu">Deine Angaben helfen anderen Familien. Jede Antwort wird mit Datum gespeichert.</p><div class="acts"><button class="btn dark" data-open="${n}">Ort ansehen</button><button class="btn" data-fab>Problem melden</button></div>`;all();ov(true);S.cur='';return}
+ const[k,q,bad]=st[i];
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><p class="mu">${esc(n)} · Frage ${i+1} von ${st.length}</p><div class="bar"><i style="width:${i/st.length*100}%"></i></div><h2 style="font-size:28px;margin:18px 0">${q}</h2><div class="og g3"><button class="opt" data-ck="ja"><b>${bad?'⚠️':'👍'}</b>Ja</button><button class="opt" data-ck="nein"><b>${bad?'👍':'👎'}</b>Nein</button><button class="opt" data-ck="unbekannt"><b>🤷</b>Weiß nicht</button></div>`;ov(true);S.cur='';
+}
+function legal(){S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Regeln und Rechtliches</h2><span class="st2 old">Entwurf, vor Veröffentlichung juristisch prüfen</span>
+<h3 class="sh3">Community-Regeln</h3><p>• Melde nur, was du selbst gesehen hast.<br>• Fotografiere keine Personen und keine Kinder. Zeig nur den Ort oder den Schaden.<br>• Keine Beleidigungen, keine Werbung, keine falschen Angaben.<br>• Bei akuter Gefahr oder Verletzten: sofort 112 rufen. Eine Meldung in der App ersetzt das nicht.</p>
+<h3 class="sh3">Datenschutz in Kürze</h3><p>• Du kannst die App ohne Konto nutzen.<br>• Im Prototyp bleiben alle Angaben auf diesem Handy.<br>• Den Standort fragt dein Handy vorher ab. Er wird nur an eine Meldung gehängt, wenn du es willst.<br>• Fotos werden verkleinert, Standortdaten im Foto werden entfernt.<br>• Es werden keine Namen oder Geburtsdaten von Kindern erfasst.</p>
+<h3 class="sh3">Hinweise zu Angaben</h3><p>Angaben stammen von Nutzern und können falsch oder veraltet sein. Komfort- und Aktualitätswerte sind keine Sicherheitsprüfung und keine amtliche Bescheinigung.</p>
+<h3 class="sh3">Impressum</h3><p class="mu">[Platzhalter: Anbieter, Anschrift, E-Mail, vertretungsberechtigte Person]</p>`;ov(true)}
+function photo(f){if(!f)return;const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const k=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);S.ph=c.toDataURL('image/jpeg',.6);URL.revokeObjectURL(u);const v=$('qpv');if(v){v.src=S.ph;v.style.display='block'}};im.src=u}
+document.addEventListener('change',e=>{if(e.target.id==='qph')photo(e.target.files[0])});
+const REG=['Köln','Kassel','Bonn','Düsseldorf','Frankfurt','Hamburg','Berlin','München','Stuttgart'];
+function rReg(){document.querySelectorAll('.rg').forEach(e=>e.innerHTML=`<button class="citybtn" data-cities aria-label="Stadt wechseln"><span class="sign">${S.r}</span><span>Stadt ändern ▾</span></button>`)}
+function cities(){S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Welche Stadt?</h2><p class="mu">Wähle deine Stadt. Weitere folgen, wenn Städte mitmachen.</p><div class="og g2">${REG.map(r=>`<button class="opt" data-rg="${r}" style="min-height:76px"><span class="sign">${r}</span><small class="mu">${P.filter(p=>p.r===r).length} Beispielorte</small></button>`).join('')}</div>`;ov(true)}
+function filt(){
+ S.cur='';const on=k=>S.io===k||S.ff.includes(k)||(k==='fav'&&S.fav)||(k.startsWith('age:')&&S.ag.includes(k.slice(4))),c=(k,l)=>`<button class="chip${on(k)?' on':''}" data-fk="${k}">${l}</button>`;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Filter</h2><h3 class="sh3">Wo?</h3><div class="row">${c('in','Drinnen')}${c('out','Draußen')}</div><h3 class="sh3">Ausstattung</h3><div class="row">${F.map(f=>c(f,lab(f))).join('')}</div><h3 class="sh3">In der Nähe</h3><div class="row">${N.map(([k])=>c(k,lab(k))).join('')}</div><h3 class="sh3">Geeignet für</h3><div class="row">${c('prof','Wie im Profil')}${AGES.map(a=>c('age:'+a,a)).join('')}</div><h3 class="sh3">Meine Orte</h3><div class="row">${c('fav','♥ Favoriten')}</div><div class="acts"><button class="btn dark" data-fdone>Fertig</button><button class="btn" data-reset>Zurücksetzen</button></div><p class="mu">Bei Ausstattung erscheinen nur Orte, bei denen die Angabe bestätigt ist.</p>`;ov(true);
+}
+const _rEnt=rEnt;
+rEnt=function(){_rEnt();S.q=S.q||'';const n=(S.io?1:0)+S.ff.length+(S.fav?1:0)+S.ag.length;$('fb').textContent='⚙ Filter'+(n?' ('+n+')':'');
+ const L=P.filter(p=>p.r===S.r),B=L.filter(p=>(S.c==='Alle'||p.c===S.c)&&fit(p,S.io)&&(!S.q||p.n.toLowerCase().includes(S.q))&&(!S.fav||D.fav.includes(p.n))&&(!S.ag.length||S.ag.some(a=>(D.age[p.n]||[]).includes(a)))),M=B.filter(p=>S.ff.every(f=>fv(p.n,f)==='ja'));
+ $('cnt').textContent=`${M.length} ${M.length===1?'Ort':'Orte'} in ${S.r}`+(S.ff.length?` · ${B.length-M.length} ohne Angabe`:'');
+ $('list').innerHTML=M.length?M.map(card).join(''):'<div class="card empty"><b class="f">Keine Treffer</b><p class="mu">Für diese Auswahl gibt es nichts oder noch keine bestätigten Angaben. Setz die Filter zurück oder trag selbst etwas ein.</p><button class="btn dark" data-reset>Filter zurücksetzen</button></div>';
+};
+document.addEventListener('input',e=>{if(e.target.id==='sq'){S.q=e.target.value.trim().toLowerCase();rEnt()}});
+const NG={};
+const io=new IntersectionObserver(es=>es.forEach(e=>{const el=e.target;if(e.isIntersecting&&!NG[el.dataset.k]&&el.scrollWidth>el.clientWidth+8){NG[el.dataset.k]=1;el.scrollTo({left:40,behavior:'smooth'});setTimeout(()=>el.scrollTo({left:0,behavior:'smooth'}),600)}}),{threshold:.9});
+function arm(){document.querySelectorAll('.tiles,.sc').forEach(el=>{el.dataset.k=el.id||'ev';el.classList.toggle('more',el.scrollWidth>el.clientWidth+8);if(el._o)return;el._o=1;el.addEventListener('scroll',()=>el.classList.toggle('end',el.scrollLeft+el.clientWidth>=el.scrollWidth-6),{passive:true});io.observe(el)})}
+const rt=n=>{const a=(D.rev[n]||[]).flatMap(r=>r.v.filter(Boolean));return a.length?`<span class="st2 none">★ ${(a.reduce((x,y)=>x+y,0)/a.length).toFixed(1).replace('.',',')} · ${D.rev[n].length}</span>`:''};
+function news(r,s){D.news.unshift({t:r.c+' bei '+r.p+': '+s,ts:Date.now()});D.news=D.news.slice(0,20)}
+function toast(m){let t=$('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';t.setAttribute('role','alert');document.body.appendChild(t)}t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),4500)}
+function mydata(){S.cur='';const j=JSON.stringify(D);$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Meine Daten</h2><p class="mu">Alles liegt nur auf diesem Handy: ${D.rep.length} Meldungen, ${Object.keys(D.rev).length} bewertete Orte, ${D.cust.length} eigene Orte. Größe etwa ${Math.round(j.length/1024)} KB von etwa 5000 KB.</p><div class="acts"><button class="btn dark" data-export>Daten kopieren (Export)</button><button class="btn" data-wipe>Alle Daten löschen</button></div><p class="mu">Mit Konten gibt es Export und Löschen später auch auf dem Server.</p>`;ov(true)}
+function welcome(i){
+ S.cur='';const o=(k,v,e,m)=>`<button class="opt${(m?D.prof[k].includes(v):D.prof[k]===v)?' on':''}" data-wp="${k}" data-v="${v}"><b>${e}</b>${v}</button>`;
+ const dots=`<p class="mu" style="text-align:center">${[0,1,2].map(k=>k===i?'●':'○').join(' ')}</p>`;
+ const body=[`<h2>Willkommen! 👋</h2><p style="margin:14px 0"><span class="sign">FamilySpot</span></p><p>Gute Orte für Kinder finden, den Tag planen und der Stadt sagen, was kaputt ist.</p>`,`<h2>Das machen wir anders</h2><div class="card pad2"><b>🕒 Frische sichtbar</b><p class="mu">Jede Angabe zeigt, wann sie zuletzt bestätigt wurde.</p></div><div class="card pad2"><b>🏛️ Meldung an die Stadt</b><p class="mu">Schäden gehen vorbereitet an den richtigen Meldeweg, mit Status.</p></div><div class="card pad2"><b>🤷 Unbekannt ist kein Nein</b><p class="mu">Was niemand weiß, bewerten wir nicht schlecht.</p></div>`,`<h2>Wer ist dabei?</h2><div class="og g3">${[['Baby','🍼'],['Kleinkind','🧸'],['Kindergarten','🎨'],['Schulkind','🎒'],['Jugendlich','🛹']].map(([v,e])=>o('ages',v,e,1)).join('')}</div><h3 class="sh3">Kinderwagen dabei?</h3><div class="og g2">${o('stroller','Ja','🚼')}${o('stroller','Nein','🚶')}</div>`][i];
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Überspringen">✕</button>${body}${dots}<div class="acts">${i<2?`<button class="btn dark" data-wnext="${i+1}">Weiter</button>`:`<button class="btn dark" data-wdone>Los geht’s</button>`}<button class="btn" data-wdone>Überspringen</button></div>`;ov(true);
+}
+all();
+if(!D.w0)setTimeout(()=>welcome(0),400);
+else if(location.search.includes('a=report'))setTimeout(onSite,400);
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
