@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>FamilySpot</title>
+<title>Tumbleo</title>
 <link rel="manifest" href="manifest.webmanifest">
+<script src="config.js"></script>
 <meta name="theme-color" content="#BFE4FF">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="FamilySpot">
+<meta name="apple-mobile-web-app-title" content="Tumbleo">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;700;800&display=swap">
@@ -106,6 +107,7 @@ button.opt.on{background:var(--mint);color:#1B1740;transform:translateY(2px);box
 #sg{display:flex;width:100%}#sg button{flex:1;padding:8px 6px;font-size:15px}
 .rph{display:block;max-width:100%;max-height:170px;border-radius:12px;border:2px solid var(--bd);margin:6px 0}
 .more:not(.end){-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 44px),transparent)}
+a.chip{text-decoration:none;color:var(--ink)}
 .fbar{display:flex;align-items:center;gap:12px;margin:2px 16px 12px}.fbar .mu{min-width:0}
 .rg.pills{border:0;background:none;padding:0}.citybtn{display:flex;align-items:center;gap:10px;font-weight:800;min-height:44px}
 .hero .citybtn{border:2px solid var(--bd);border-radius:999px;padding:0 18px;background:var(--card)}.hero .citybtn .sign{display:none}
@@ -117,18 +119,19 @@ button.opt.on{background:var(--mint);color:#1B1740;transform:translateY(2px);box
 <body>
 <section class="view on" id="v0">
 <header class="hero">
-<div class="brand"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="10" fill="#A48BFF" stroke="#1B1740" stroke-width="2"/><path d="M16 25s-6-5.5-6-10a6 6 0 0112 0c0 4.500-6 10-6 10z" fill="#FFC531" stroke="#1B1740" stroke-width="2"/><circle cx="16" cy="15" r="2.200" fill="#1B1740"/></svg>FamilySpot</div>
+<div class="brand"><svg width="34" height="34" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="10" fill="#A48BFF" stroke="#1B1740" stroke-width="2"/><path d="M16 25s-6-5.5-6-10a6 6 0 0112 0c0 4.500-6 10-6 10z" fill="#FFC531" stroke="#1B1740" stroke-width="2"/><circle cx="16" cy="15" r="2.200" fill="#1B1740"/></svg>Tumbleo</div>
 <h1 id="h1"></h1>
 <div class="pills rg" role="group" aria-label="Region"></div>
 <svg class="land" viewBox="0 0 360 84" height="84" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><circle cx="300" cy="30" r="20" fill="#FFC531" stroke="#1B1740" stroke-width="2"/><path d="M0 62Q60 26 130 54T260 50T360 58V84H0Z" fill="#3DD9B0" stroke="#1B1740" stroke-width="2"/><path d="M60 52l9-20 9 20z" fill="#1B1740"/><path d="M0 76Q90 52 180 70T360 68V84H0Z" fill="#A48BFF" stroke="#1B1740" stroke-width="2"/></svg>
 </header>
 <h2 class="sec">Gerade dringend? Sofort suchen</h2>
 <div class="tiles" id="tiles"></div>
+<p class="mu" style="margin:6px 16px 0">Die Treffer kommen von Google. Bitte vor der Fahrt die Öffnungszeiten prüfen.</p>
 <h2 class="sec">Beispielorte zum Ausprobieren</h2>
 <div class="pad"><input id="sq" type="search" placeholder="Ort suchen …" aria-label="Ort suchen" style="margin:0 0 10px"></div>
 <div class="sc" id="cats"></div>
 <div id="fl" hidden></div>
-<div class="fbar"><button class="chip" id="fb" data-filter>⚙ Filter</button><span class="mu" id="cnt"></span></div>
+<div class="fbar"><button class="chip" id="fb" data-filter>⚙ Filter</button><button class="chip" data-addmenu>＋ Hinzufügen</button><span class="mu" id="cnt"></span></div>
 <div class="pad" id="list"></div>
 </section>
 
@@ -162,6 +165,8 @@ button.opt.on{background:var(--mint);color:#1B1740;transform:translateY(2px);box
 
 <script>
 const $=i=>document.getElementById(i);
+const APP=(window.FS_CONFIG&&window.FS_CONFIG.APP_NAME)||'Tumbleo';
+document.title=APP;document.querySelectorAll('.brand').forEach(b=>{b.lastChild.textContent=APP});
 const P=[
 {r:'Köln',n:'Kölner Zoo',c:'Tierpark',w:'both',q:'Kölner Zoo Köln'},
 {r:'Köln',n:'Odysseum Köln',c:'Erlebniswelt',w:'in',q:'Odysseum Köln'},
@@ -175,16 +180,15 @@ const P=[
 {r:'Köln',n:'Stadtwald und Decksteiner Weiher',c:'Park',w:'out',q:'Decksteiner Weiher Köln'},
 {r:'Köln',n:'Aachener Weiher',c:'Park',w:'out',q:'Aachener Weiher Köln'},
 {r:'Köln',n:'Forstbotanischer Garten',c:'Park',w:'out',q:'Forstbotanischer Garten Köln'},
-{r:'Köln',n:'Fühlinger See',c:'Bad',w:'out',q:'Fühlinger See Köln'},
-{r:'Köln',n:'Kölner Seilbahn',c:'Sehenswürdigkeit',w:'out',q:'Kölner Seilbahn'},
+{r:'Köln',n:'Fühlinger See',c:'Bad',w:'out',q:'Fühlinger See Köln',hint:'Badesee: Baden nur in der Saison, Infos der Stadt prüfen'},
+{r:'Köln',n:'Kölner Seilbahn',c:'Sehenswürdigkeit',w:'out',q:'Kölner Seilbahn',hint:'Saisonbetrieb, im Winter meist geschlossen (Adventsfahrten möglich)'},
 {r:'Köln',n:'Kölner Dom',c:'Sehenswürdigkeit',w:'in',q:'Kölner Dom'},
-{r:'Köln',n:'Phantasialand Brühl',c:'Freizeitpark',w:'both',q:'Phantasialand Brühl'},
-{r:'Kassel',n:'Herkules im Bergpark',c:'Sehenswürdigkeit',w:'out',q:'Herkules Kassel'},
+{r:'Köln',n:'Phantasialand Brühl',c:'Freizeitpark',w:'both',q:'Phantasialand Brühl',hint:'Freizeitpark: Öffnungstage wechseln mit der Saison'},
+{r:'Kassel',n:'Herkules im Bergpark',c:'Sehenswürdigkeit',w:'out',q:'Herkules Kassel',hint:'Wasserspiele laufen nur in der Saison'},
 {r:'Kassel',n:'Schloss Wilhelmshöhe',c:'Museum',w:'in',q:'Schloss Wilhelmshöhe Kassel'},
-{r:'Kassel',n:'Naturkundemuseum im Ottoneum',c:'Museum',w:'in',q:'Naturkundemuseum Ottoneum Kassel'},
+{r:'Kassel',n:'Naturkundemuseum im Ottoneum',c:'Museum',w:'in',q:'Naturkundemuseum Ottoneum Kassel',hint:'Montags geschlossen'},
 {r:'Kassel',n:'Park Schönfeld',c:'Park',w:'out',q:'Park Schönfeld Kassel'},
 {r:'Kassel',n:'Fuldaaue',c:'Park',w:'out',q:'Fuldaaue Kassel'},
-{r:'Kassel',n:'Kurhessen Therme',c:'Bad',w:'in',q:'Kurhessen Therme Kassel'},
 {r:'Bonn',n:'Rheinaue',c:'Park',w:'out',q:'Rheinaue Bonn'},
 {r:'Bonn',n:'Haus der Geschichte',c:'Museum',w:'in',q:'Haus der Geschichte Bonn'},
 {r:'Bonn',n:'Museum Koenig',c:'Museum',w:'in',q:'Museum Koenig Bonn'},
@@ -211,8 +215,7 @@ const P=[
 {r:'München',n:'Olympiapark München',c:'Park',w:'both',q:'Olympiapark München'},
 {r:'Stuttgart',n:'Wilhelma',c:'Tierpark',w:'both',q:'Wilhelma Stuttgart'},
 {r:'Stuttgart',n:'Killesbergpark',c:'Park',w:'out',q:'Killesbergpark Stuttgart'},
-{r:'Stuttgart',n:'Mercedes-Benz Museum',c:'Museum',w:'in',q:'Mercedes-Benz Museum Stuttgart'},
-{r:'Stuttgart',n:'Fernsehturm Stuttgart',c:'Sehenswürdigkeit',w:'in',q:'Fernsehturm Stuttgart'}];
+{r:'Stuttgart',n:'Mercedes-Benz Museum',c:'Museum',w:'in',q:'Mercedes-Benz Museum Stuttgart'}];
 const W={both:'Drinnen & draußen',in:'Drinnen',out:'Draußen'};
 const CAT={Tierpark:['🦒','--mint'],Erlebniswelt:['🔬','--grape'],Museum:['🏛️','--sky'],Park:['🌳','--sun'],Bad:['🏊','--sky'],'Sehenswürdigkeit':['🏰','--sun'],Freizeitpark:['🎢','--cor'],Spielplatz:['🛝','--sun']};
 const F=['Zaun','Schatten','Sitzgelegenheiten','Toilette','Wickeltisch','Trinkwasser','Kinderwagenzugang','Parkplatz','Rollstuhlgerecht'];
@@ -221,7 +224,8 @@ const N=[['Toilette in der Nähe','Öffentliche Toilette in der Nähe?'],['Wicke
 const AGES=['Baby','Kleinkind','Kindergarten','Schulkind','Jugendlich'];
 const DUR={Tierpark:180,Erlebniswelt:150,Museum:90,Park:60,Bad:120,'Sehenswürdigkeit':60,Freizeitpark:300,Spielplatz:45};
 const lab=f=>({'Toilette in der Nähe':'WC in der Nähe','Wickelmöglichkeit in der Nähe':'Wickeln in der Nähe'}[f]||f.replace('zugang',''));
-const T=[['🍼','Wickeln','Wickelraum in der Nähe','--cor'],['🚻','WC','öffentliche Toilette in der Nähe','--sky'],['💊','Apotheke','Apotheke in der Nähe','--mint'],['🛝','Spielplatz','Spielplatz','--sun'],['☕','Café','Café mit Spielecke','--cor'],['🏠','Indoor','Indoor Spielplatz','--sky'],['🦒','Tierpark','Tierpark','--mint'],['🏊','Bad','Schwimmbad','--grape'],['🍦','Eis','Eisdiele','--sun']];
+const T=[['🍼','Wickeln','Wickelraum in der Nähe','--cor'],['🚻','WC','öffentliche Toilette in der Nähe','--sky'],['💊','Apotheke','Apotheke in der Nähe','--mint'],['🛝','Spielplatz','Spielplatz','--sun'],['☕','Café','Café mit Spielecke','--cor'],['🏠','Indoor','Indoor Spielplatz','--sky'],['🦒','Tierpark','Tierpark','--mint'],['🏊','Bad','Freibad Hallenbad Stadtbad','--grape'],['🍦','Eis','Eisdiele','--sun']];
+CAT['Café']=['☕','--cor'];CAT['Sonstiger Ort']=['📍','--sky'];DUR['Café']=45;DUR['Sonstiger Ort']=60;
 const MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 const S={r:'Köln',c:'Alle',io:'',ff:[],wx:'Egal',sk:0,sg:'ev',free:false,rv:{},cur:''};
 let D=null;try{D=JSON.parse(localStorage.getItem('fs_data'))}catch(e){}
@@ -245,7 +249,7 @@ const planBtn=(n,x='')=>`<button class="btn${plan.includes(n)?' on':''}" data-pl
 
 function card(p){const[e,c]=CAT[p.c]||['📍','--sky'],n=p.n;
 return `<article class="card pl" style="--cc:var(${c})"><button class="top" data-open="${n}"><span class="bd" style="background:var(${c})">${e}</span><span class="tx"><h3>${n}</h3><span class="mu">${p.c} · ${W[p.w]}</span></span><span class="chev" aria-hidden="true">›</span></button>
-<div>${badges(n)}</div>
+${p.hint?`<p class="mu" style="margin:8px 0 0">ℹ️ ${p.hint}</p>`:''}<div>${badges(n)}</div>
 ${score(n).k?`<div class="dots" aria-label="Familien-Komfort">${F.map(f=>`<i class="d ${fv(n,f)}"></i>`).join('')}<span class="mu">${score(n).k} von ${F.length} bekannt</span></div>`:'<p class="mu hint">Komfort noch unbekannt. Tippe auf den Ort und hilf mit.</p>'}
 <div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a>${planBtn(n)}<button class="btn favb${D.fav.includes(n)?' on':''}" data-fav="${n}" aria-label="Favorit">♥</button></div></article>`}
 
@@ -307,7 +311,7 @@ ${rp.map(r=>`<p class="mu">${Date.now()-r.ts>2592000000?'Veraltet':'Neu gemeldet
 }
 function form(k){
  const f=(l,id,t,x)=>`<label class="fld">${l}<input id="${id}" type="${t}" ${x||''}></label>`,s=(l,id,o)=>`<label class="fld">${l}<select id="${id}">${o.map(v=>`<option>${v}</option>`).join('')}</select></label>`;
- $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>${k==='ev'?'Termin vormerken':'Tour vorschlagen'}</h2>`+(k==='ev'?f('Titel','evt','text','maxlength=80')+f('Datum','evd','date')+f('Ort','evo','text','maxlength=80')+s('Art','evk',Object.keys(EK))+s('Eintritt','evp',['Kostenlos','Kostenpflichtig'])+s('Altersgruppe','eva',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+s('Drinnen oder draußen','evi',['Drinnen','Draußen']):f('Name der Tour','trt','text','maxlength=80')+f('Länge in km','trl','number','min=0 step=0.1')+f('Dauer in Minuten','trd','number','min=0 step=5')+s('Art der Tour','tra',['Spaziergang','Wanderung','Radtour','Kinderwagenroute','Schatzsuche','Spielplatz-Hopping','Naturlehrpfad'])+s('Schwierigkeit','trs',['Leicht','Mittel','Schwer'])+s('Kinderwagentauglich','trk',['Unbekannt','Ja','Nein'])+s('Wegbeschaffenheit','trw',['Unbekannt','Asphalt','Schotter','Waldweg','Naturpfad'])+s('Rundweg','trr',['Unbekannt','Ja','Nein'])+s('Toiletten unterwegs','trx',['Unbekannt','Ja','Nein'])+s('Einkehrmöglichkeit','tre',['Unbekannt','Ja','Nein'])+s('Empfohlenes Alter','trg',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+'<label class="fld">Beschreibung<textarea id="trb" maxlength="500"></textarea></label>')+`<button class="btn dark wide" data-save="${k}">Speichern</button><p class="mu">${k==='tr'?'Vor einer Veröffentlichung prüfen wir Plausibilität, Rechte und Sicherheit. Hier gilt dein Vorschlag nur als vorgemerkt.':'Vergangene Termine werden automatisch ausgeblendet.'}</p>`;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>${k==='ev'?'Termin vormerken':'Tour vorschlagen'}</h2>`+(k==='ev'?f('Titel','evt','text','maxlength=80')+f('Datum','evd','date')+f('Bis (optional)','eve','date')+f('Ort','evo','text','maxlength=80')+f('Link zur Quelle (optional)','evs','url')+s('Art','evk',Object.keys(EK))+s('Eintritt','evp',['Kostenlos','Kostenpflichtig'])+s('Altersgruppe','eva',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+s('Drinnen oder draußen','evi',['Drinnen','Draußen']):f('Name der Tour','trt','text','maxlength=80')+f('Länge in km','trl','number','min=0 step=0.1')+f('Dauer in Minuten','trd','number','min=0 step=5')+s('Art der Tour','tra',['Spaziergang','Wanderung','Radtour','Kinderwagenroute','Schatzsuche','Spielplatz-Hopping','Naturlehrpfad'])+s('Schwierigkeit','trs',['Leicht','Mittel','Schwer'])+s('Kinderwagentauglich','trk',['Unbekannt','Ja','Nein'])+s('Wegbeschaffenheit','trw',['Unbekannt','Asphalt','Schotter','Waldweg','Naturpfad'])+s('Rundweg','trr',['Unbekannt','Ja','Nein'])+s('Toiletten unterwegs','trx',['Unbekannt','Ja','Nein'])+s('Einkehrmöglichkeit','tre',['Unbekannt','Ja','Nein'])+s('Empfohlenes Alter','trg',['Alle Altersgruppen','Baby und Kleinkind','Kindergarten','Schulkind'])+'<label class="fld">Beschreibung<textarea id="trb" maxlength="500"></textarea></label>')+`<button class="btn dark wide" data-save="${k}">Speichern</button><p class="mu">${k==='tr'?'Vor einer Veröffentlichung prüfen wir Plausibilität, Rechte und Sicherheit. Hier gilt dein Vorschlag nur als vorgemerkt.':'Vergangene Termine werden automatisch ausgeblendet.'}</p>`;
  S.cur='';ov(true);
 }
 const gv=i=>$(i).value.trim();
@@ -366,12 +370,17 @@ document.addEventListener('click',e=>{
  else if(g('data-mydata'))mydata();
  else if(b=g('data-export')){if(navigator.clipboard)navigator.clipboard.writeText(JSON.stringify(D));b.textContent='Kopiert ✓'}
  else if(b=g('data-wipe')){if(b.dataset.w){try{localStorage.removeItem('fs_data');localStorage.removeItem('fs_plan')}catch(e){}location.reload()}else{b.dataset.w=1;b.textContent='Wirklich alles löschen? Nochmal tippen'}}
+ else if(g('data-video'))video();
+ else if(g('data-addmenu'))addMenu();
+ else if(b=g('data-add')){const k=b.dataset.add;if(k==='place')addPlaceForm();else if(k==='fix')fixForm();else form(k)}
+ else if(g('data-sp')){const n=gv('apn');if(!n){$('aperr').textContent='Bitte einen Namen eintragen.';return}if(byN(n)){$('aperr').textContent='Diesen Ort gibt es schon.';return}const r=gv('apr'),o={r,n,c:gv('apc'),w:{'Draußen':'out','Drinnen':'in','Drinnen und draußen':'both'}[gv('apw')],q:(n+' '+gv('apa')+' '+r).replace(/\s+/g,' '),custom:1,hint:'Selbst hinzugefügt, nicht geprüft'};if(gv('aps'))o.src=gv('aps');P.push(o);D.cust.push(o);D.upd[n]=Date.now();S.r=r;D.reg=r;sv();all();place(n)}
+ else if(g('data-sf')){const t=gv('fxt'),n=$('fxp').value;if(!t)return;D.rep.push({p:n,c:'Angabe ist falsch',t,ts:Date.now(),cf:1});D.upd[n]=Date.now();sv();all();place(n)}
  else if(g('data-legal'))legal();
  else if(g('data-cf3')){S.cf3=!S.cf3;kom()}
  else if(g('data-reset')){S.c='Alle';S.io='';S.ff=[];S.fav=false;S.ag=[];S.q='';$('sq').value='';rEnt();if($('ov').classList.contains('on'))filt()}
  else if(g('data-share'))share();
  else if(b=g('data-save')){
-  if(b.dataset.save==='ev'){if(!gv('evt')||!gv('evd'))return;D.ev.push({t:gv('evt'),d:gv('evd'),o:gv('evo'),k:gv('evk'),p:gv('evp'),a:gv('eva'),i:gv('evi')})}
+  if(b.dataset.save==='ev'){if(!gv('evt')||!gv('evd'))return;D.ev.push({t:gv('evt'),d:gv('evd'),e:gv('eve'),src:gv('evs'),o:gv('evo'),k:gv('evk'),p:gv('evp'),a:gv('eva'),i:gv('evi')})}
   else{if(!gv('trt'))return;D.tr.push({t:gv('trt'),l:gv('trl'),dm:gv('trd'),s:gv('trs'),k:gv('trk'),a:gv('tra'),w:gv('trw'),rr:gv('trr'),x:gv('trx'),ei:gv('tre'),g:gv('trg'),b:gv('trb'),ts:Date.now()})}
   sv();rEr();ov(false)}
 });
@@ -383,7 +392,7 @@ const mm=t=>('0'+Math.floor(t/60)%24).slice(-2)+':'+('0'+t%60).slice(-2);
 const sched=()=>{let cur=D.t0.split(':').reduce((a,b)=>a*60+ +b,0);const items=plan.map((n,i)=>{const p=byN(n),d=D.pd[n]||DUR[p.c]||60,s=cur;cur+=d+D.buf;return{n,p,d,s,e:s+d,i}});return{items,end:items.length?items[items.length-1].e:0}};
 const pack=()=>{const a=D.prof.ages,x=['Trinkflasche','Snacks'];if(S.wx==='Regen')x.push('Regenjacke','Wechselkleidung');else if(S.wx==='Sonnig')x.push('Sonnencreme','Sonnenhut');else x.push('Jacke für alle Fälle');if(a.includes('Baby')||a.includes('Kleinkind'))x.push('Wickeltasche','Feuchttücher','Ersatzkleidung');if(D.prof.stroller==='Ja')x.push('Kinderwagen');if(a.includes('Kleinkind')||a.includes('Kindergarten'))x.push('Lieblingsspielzeug');return[...new Set(x)]};
 function autoPlan(h){const L=P.filter(p=>p.r===S.r&&(S.wx==='Regen'?p.w==='in':S.wx==='Sonnig'?p.w!=='in':true)).sort((a,b)=>((a.w==='in')-(b.w==='in'))||(DUR[a.c]-DUR[b.c]));let t=0;plan=[];L.forEach(p=>{const d=D.pd[p.n]||DUR[p.c]||60;if(plan.length<4&&t+d<=h*60){plan.push(p.n);t+=d+D.buf}})}
-function share(){const{items,end}=sched();const tx='Unser Ausflug in '+S.r+'\n'+items.map(x=>mm(x.s)+' '+x.n).join('\n')+'\nEnde ca. '+mm(end)+'\n'+route();if(navigator.share)navigator.share({title:'FamilySpot',text:tx}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(tx)}
+function share(){const{items,end}=sched();const tx='Unser Ausflug in '+S.r+'\n'+items.map(x=>mm(x.s)+' '+x.n).join('\n')+'\nEnde ca. '+mm(end)+'\n'+route();if(navigator.share)navigator.share({title:APP,text:tx}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(tx)}
 function rPlan(){
  const{items,end}=sched(),tot=items.reduce((a,x)=>a+x.d,0),nap=D.nap==='12:00–14:00'?[720,840]:D.nap==='13:00–15:00'?[780,900]:null,hit=nap&&items.some(x=>x.s<nap[1]&&x.e>nap[0]);
  const dl=v=>v>=60?String(v/60).replace('.',',')+' Std.':v+' Min.';
@@ -397,7 +406,7 @@ function place(n){
  const p=byN(n),[e,c]=CAT[p.c]||['📍','--sky'],sc=score(n),rv=D.rev[n]||[],rp=D.rep.filter(r=>r.p===n),ag=D.age[n]||[];S.cur=n;
  const row=(f,t,bad)=>`<div class="frow"><span>${t}</span><span class="tri">${[['ja','Ja'],['unbekannt','?'],['nein','Nein']].map(([v,l])=>`<button class="${fv(n,f)===v?'s '+v+(bad?' bad':''):''}" data-f="${f}" data-v="${v}" data-n="${n}">${l}</button>`).join('')}</span></div>`;
  const nr=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q+' '+p.q);
- $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><span class="bd" style="background:var(${c})">${e}</span><h2><span class="sign">${n}</span></h2><p class="mu">${p.c} · ${W[p.w]}</p>
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><span class="bd" style="background:var(${c})">${e}</span><h2><span class="sign">${n}</span></h2><p class="mu">${p.c} · ${W[p.w]}</p>${p.hint?`<p class="mu">ℹ️ ${p.hint}</p>`:''}<p class="mu">Beispielort. Öffnungszeiten bitte immer prüfen.</p>
 <div>${badges(n)}</div><p class="mu">${D.upd[n]?'Zuletzt bestätigt oder geändert: '+fd(D.upd[n]):'Noch nicht von der Community geprüft.'} Das ist keine amtliche Prüfung.</p>
 <div class="acts"><a class="btn dark" target="_blank" rel="noopener" href="${rl(p)}">Route</a>${planBtn(n)}<button class="btn" data-conf>✓ Stand heute bestätigen</button><button class="btn" data-ci="${n}">✅ Check-in vor Ort</button></div>
 <h3 class="sh3">Zustand: Was ist kaputt?</h3><p class="mu">Antworte nur, was du selbst gesehen hast. Bei akuter Gefahr melde es zusätzlich der Stadt.</p>${Z.map(([k,t])=>row(k,t,1)).join('')}
@@ -419,7 +428,7 @@ const CITY={'Köln':{n:'Stadt Köln',u:'https://sags-uns.stadt-koeln.de',u2:'htt
 const DEMO=[['Karlsaue','Defektes Spielgerät',9,'An Stadt gemeldet'],['Rheinpark Köln','Glasscherben',4,'In Bearbeitung'],['Bergpark Wilhelmshöhe','Zaun beschädigt',21,'Behoben'],['Kölner Zoo','Müll',2,'Neu (Nutzer)'],['Flora und Botanischer Garten','Vandalismus',13,'An Stadt gemeldet']].map(([p,c,d,st],i)=>({p,c,ts:Date.now()-d*864e5,st,cf:[4,2,3,1,3][i]}));
 function cityForm(i){
  const r=D.rep[i],p=byN(r.p),C=CITY[p.r]||{n:'Stadt '+p.r,u:'https://www.google.com/search?q='+encodeURIComponent('Stadt '+p.r+' Mängelmelder'),h:'Das offizielle Meldeportal dieser Stadt hinterlegen wir bei der Anbindung. Bis dahin findest du es über die Suche.'};S.back=r.p;S.cur='';
- const tx=`Meldung über FamilySpot\nOrt: ${p.n} (${p.r})\nKarte: ${r.loc?'https://www.google.com/maps?q='+r.loc:rl(p)}\nKategorie: ${r.c}${r.sid?'\nNummer vor Ort: '+r.sid:''}\nBeschreibung: ${r.t||'–'}\nGemeldet am: ${fd(r.ts)}\nHinweis: Meldung einer Privatperson, bitte vor Ort prüfen.`;
+ const tx=`Meldung über Tumbleo\nOrt: ${p.n} (${p.r})\nKarte: ${r.loc?'https://www.google.com/maps?q='+r.loc:rl(p)}\nKategorie: ${r.c}${r.sid?'\nNummer vor Ort: '+r.sid:''}\nBeschreibung: ${r.t||'–'}\nGemeldet am: ${fd(r.ts)}\nHinweis: Meldung einer Privatperson, bitte vor Ort prüfen.`;
  $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><button class="chip" data-back>‹ Zurück</button><h2>Meldung an ${C.n}</h2><p class="mu">So kommt der Schaden zur Verwaltung: Wir bereiten den Text vor, du schickst ihn über den offiziellen Weg ab. ${C.h}</p>
 <div class="card pad2"><pre class="pre" id="ctx">${esc(tx)}</pre></div>${r.ph?`<img class="rph" src="${r.ph}" alt="Foto zur Meldung"><p class="mu">Das Foto hängst du im Portal oder in der E-Mail selbst an. Halte das Bild gedrückt, um es zu speichern.</p>`:''}
 <div class="acts"><button class="btn dark" data-copy="${i}">Text kopieren</button><a class="btn" target="_blank" rel="noopener" href="${C.u}">Offizielles Portal</a>${C.u2?`<a class="btn" target="_blank" rel="noopener" href="${C.u2}">Spielplatz-Formular</a>`:''}<a class="btn" href="mailto:?subject=${encodeURIComponent('Schadensmeldung: '+p.n)}&body=${encodeURIComponent(tx)}">E-Mail-Entwurf</a></div>
@@ -452,14 +461,28 @@ function rPf(){
 <h3 class="sh3">Budget</h3><div class="og g3">${[['Kostenlos','🆓'],['Günstig','💶'],['Egal','🎟️']].map(([v,e])=>o('budget',v,e)).join('')}</div>
 ${D.news.length?`<div class="card pad2"><p class="f" style="font-size:19px">Neuigkeiten zu euren Meldungen</p>${D.news.slice(0,4).map(x=>`<p class="mu">${fd(x.ts)} · ${esc(x.t)}</p>`).join('')}</div>`:''}<div class="card pad2"><p class="f" style="font-size:19px">Eure Beiträge</p><p class="mu">${n} Angaben, Bewertungen und Meldungen. Je mehr ihr teilt, desto besser für alle Familien.</p><div class="og g2">${[['🧭','Entdecker',1],['🛍','Spielplatz-Scout',8],['🤝','Familienhelfer',20],['🏛️','Stadt-Melder',-1]].map(([e,l,t])=>{const on=t<0?D.rep.some(r=>r.fw):n>=t;return `<div class="opt bdg${on?' on':''}"><b>${e}</b>${l}<small>${on?'Freigeschaltet':t<0?'Meldung an Stadt':'ab '+t+' Beiträgen'}</small></div>`}).join('')}</div></div>
 <div class="card pad2" style="background:var(--sky);color:#1B1740"><p class="f" style="font-size:19px">Für Städte und Kommunen</p><p>So kommen Schäden direkt bei der Verwaltung an: Vorschau der Meldeübersicht.</p><button class="btn dark" data-kom>Vorschau öffnen</button></div>
+<div class="card pad2"><p class="f" style="font-size:19px">Erklärvideo</p><p class="mu">68 Sekunden: Was ist ${APP}?</p><button class="btn dark" data-video>▶ Ansehen</button></div>
 <div class="card pad2"><p class="f" style="font-size:19px">Regeln und Rechtliches</p><p class="mu">Community-Regeln, Datenschutz und Impressum (Entwurf).</p><button class="btn" data-legal>Lesen</button></div>
 <div class="card pad2"><p class="f" style="font-size:19px">Meine Daten</p><p class="mu">Exportieren oder alles löschen.</p><button class="btn" data-mydata>Öffnen</button></div>
 <p class="mu note">Alles bleibt auf diesem Handy, keine Namen, keine Geburtsdaten. „Kinderwagen: Ja“ zeigt euch bei jedem Ort, ob der Kinderwagenzugang bestätigt ist. Die Beispielorte sind nur zum Ausprobieren.</p>`;
 }
-const EK={Fest:'🎉',Markt:'🛍️',Flohmarkt:'🧺',Workshop:'✂️',Theater:'🎭',Sport:'⚽',Natur:'🌲',Ferienprogramm:'🏖️'};
+const EK={Weihnachtsmarkt:'🎄',Fest:'🎉',Markt:'🛍️',Flohmarkt:'🧺',Workshop:'✂️',Theater:'🎭',Sport:'⚽',Natur:'🌲',Ferienprogramm:'🏖️'};
 const TK={Kinderwagenroute:'🚼',Spaziergang:'🚶',Wanderung:'🥾',Radtour:'🚲',Schatzsuche:'🗺️',Naturlehrpfad:'🌿'};
+const dmy=s=>{const a=s.split('-');return a[2]+'.'+a[1]+'.'+a[0]};
 const addD=n=>{const d=new Date(Date.now()+n*864e5);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)};
 const EX=[{t:'Kinderflohmarkt im Veedel',k:'Flohmarkt',n:6,o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Puppentheater für die Kleinen',k:'Theater',n:9,o:'Kassel',p:'Kostenpflichtig',a:'Kindergarten',i:'Drinnen'},{t:'Basteln mit Naturmaterial',k:'Workshop',n:12,o:'Köln',p:'Kostenlos',a:'Schulkind',i:'Drinnen'},{t:'Familien-Schwimmtag',k:'Sport',n:14,o:'Köln',p:'Kostenpflichtig',a:'Alle Altersgruppen',i:'Drinnen'},{t:'Familien-Waldtag',k:'Natur',n:16,o:'Kassel',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Laternenumzug für Familien',k:'Fest',n:20,o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Kinder-Winterfest',k:'Fest',n:24,o:'Kassel',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen'},{t:'Ferienprogramm Naturerlebnis',k:'Ferienprogramm',n:30,o:'Kassel',p:'Kostenpflichtig',a:'Schulkind',i:'Draußen'}].map(e=>({...e,d:addD(e.n),ex:1}));
+const REAL=[
+{t:'Hafen-Weihnachtsmarkt am Rheinauhafen',k:'Weihnachtsmarkt',d:'2026-11-13',e:'2027-01-03',o:'Köln',p:'Preis offen',a:'Alle Altersgruppen',i:'Draußen',src:'https://www.koeln.de/weihnachten/weihnachtsmaerkte-koeln',q:'Hafen-Weihnachtsmarkt Rheinauhafen Köln'},
+{t:'Weihnachtsmarkt am Kölner Dom',k:'Weihnachtsmarkt',d:'2026-11-16',e:'2026-12-23',o:'Köln',p:'Preis offen',a:'Alle Altersgruppen',i:'Draußen',src:'https://www.koeln.de/weihnachten/weihnachtsmaerkte-koeln',q:'Weihnachtsmarkt Kölner Dom Roncalliplatz'},
+{t:'Markt der Engel am Neumarkt',k:'Weihnachtsmarkt',d:'2026-11-16',e:'2026-12-23',o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen',src:'https://www.festivalsindeutschland.de/festival/markt-der-engel-koeln-neumarkt',q:'Markt der Engel Neumarkt Köln'},
+{t:'Nikolausdorf am Rudolfplatz',k:'Weihnachtsmarkt',d:'2026-11-16',e:'2026-12-23',o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen',note:'Am 22.11. geschlossen',src:'https://www.festivalsindeutschland.de/festival/nikolausdorf-rudolfplatz-koeln',q:'Nikolausdorf Rudolfplatz Köln'},
+{t:'Heinzels Wintermärchen',k:'Weihnachtsmarkt',d:'2026-11-23',e:'2027-01-10',o:'Köln',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen',note:'Alter Markt und Heumarkt, Eisbahn kostet extra',src:'https://www.festivalsindeutschland.de/festival/heinzels-wintermaerchen-koeln-altstadt',q:'Heinzels Wintermärchen Köln Heumarkt'},
+{t:'Kindersachen-Flohmarkt Krewelshof Lohmar',k:'Flohmarkt',d:'2026-11-28',o:'Köln',p:'Preis offen',a:'Alle Altersgruppen',i:'Drinnen und draußen',note:'Lohmar bei Köln, 9 bis 15 Uhr',src:'https://www.regioactive.de/markt/kindersachen-flohmarkt-krewelshof-lohmar-termine-tickets-96b35e0cb88a',q:'Krewelshof Lohmar'},
+{t:'Kinderflohmarkt Tante Astrid (Ehrenfeld)',k:'Flohmarkt',d:'2026-11-29',o:'Köln',p:'Preis offen',a:'Baby und Kleinkind',i:'Drinnen und draußen',note:'Baby- und Kindersachen, Vogelsanger Str. 282',src:'https://www.koeln.de/events/2026-11-29/',q:'Vogelsanger Str. 282 Köln'},
+{t:'Kinderflohmarkt Tante Astrid (Ehrenfeld)',k:'Flohmarkt',d:'2026-12-06',o:'Köln',p:'Preis offen',a:'Baby und Kleinkind',i:'Drinnen und draußen',note:'Baby- und Kindersachen, Vogelsanger Str. 282',src:'https://www.koeln.de/?p=27431',q:'Vogelsanger Str. 282 Köln'},
+{t:'Märchenweihnachtsmarkt Kassel',k:'Weihnachtsmarkt',d:'2026-11-23',e:'2026-12-30',o:'Kassel',p:'Kostenlos',a:'Alle Altersgruppen',i:'Draußen',note:'Täglich 11 bis 20 Uhr, 24. bis 26.12. geschlossen',src:'https://www.weihnachtsmarkt-kassel.de',q:'Märchenweihnachtsmarkt Kassel Königsplatz'},
+{t:'Nikolausmarkt Baunatal',k:'Weihnachtsmarkt',d:'2026-12-04',e:'2026-12-13',o:'Kassel',p:'Preis offen',a:'Alle Altersgruppen',i:'Draußen',note:'Baunatal bei Kassel',src:'https://www.wlz-online.de/nordhessen/weihnachtsmaerkte-in-nordhessen-2026-alle-termine-und-oeffnungszeiten-94576714.html',q:'Nikolausmarkt Baunatal'}
+].map(e=>({...e,real:1}));
 const TX=[{t:'Rheinpark-Runde',r:'Köln',a:'Kinderwagenroute',s:'Leicht',k:'Ja',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Alle Altersgruppen',q:'Rheinpark Köln'},{t:'Entdeckerweg im Forstbotanischen Garten',r:'Köln',a:'Naturlehrpfad',s:'Leicht',k:'Unbekannt',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Schulkind',q:'Forstbotanischer Garten Köln'},{t:'Spaziergang durch die Karlsaue',r:'Kassel',a:'Spaziergang',s:'Leicht',k:'Ja',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Alle Altersgruppen',q:'Karlsaue Kassel'},{t:'Bergpark: Wasserspiele-Weg',r:'Kassel',a:'Wanderung',s:'Mittel',k:'Unbekannt',w:'Unbekannt',rr:'Unbekannt',x:'Unbekannt',ei:'Unbekannt',g:'Schulkind',q:'Bergpark Wilhelmshöhe Kassel'}];
 const COLS=[['☔','Regentag-Ideen',p=>p.w==='in'],['☀️','Draußen-Tipps',p=>p.w==='out'],['🦒','Tiere und Zoo',p=>p.c==='Tierpark'],['🌳','Natur und Parks',p=>p.c==='Park'],['🔬','Wissen und Museen',p=>p.c==='Museum'||p.c==='Erlebniswelt'],['🏊','Baden und Therme',p=>p.c==='Bad']];
 function rEr(){
@@ -467,12 +490,12 @@ function rEr(){
  $('sg').innerHTML=[['Termine','ev'],['Touren','tr'],['Sammlungen','co']].map(([l,k])=>`<button data-sg="${k}" aria-pressed="${S.sg===k}">${l}</button>`).join('');
  const ch=(a,k,l,on)=>`<button class="chip${on?' on':''}" data-${a}="${k}">${l}</button>`;let h='';
  if(S.sg==='ev'){
-  const t=today(),evs=[...D.ev,...(S.ex?(['Köln','Kassel'].includes(S.r)?EX.filter(e=>e.o===S.r):EX.slice(0,5).map(e=>({...e,o:S.r}))):[])];
-  let live=evs.filter(e=>e.d>=t).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);
+  const t=today(),evs=[...D.ev,...REAL.filter(e=>e.o===S.r),...(S.ex&&!['Köln','Kassel'].includes(S.r)?EX.slice(0,5).map(e=>({...e,o:S.r})):[])];
+  let live=evs.filter(e=>(e.e||e.d)>=t).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:0);
   if(S.ef==='Kostenlos')live=live.filter(e=>e.p==='Kostenlos');else if(S.ef)live=live.filter(e=>e.i===S.ef);
   if(S.ek)live=live.filter(e=>(e.k||'Fest')===S.ek);
   const old=D.ev.filter(e=>e.d<t).length;
-  h=`<div class="sc">${['Kostenlos','Drinnen','Draußen'].map(x=>ch('ef',x,x,S.ef===x)).join('')}${Object.keys(EK).map(x=>ch('ek',x,EK[x]+' '+x,S.ek===x)).join('')}</div><div class="row">${ch('ex','1','Beispiel-Termine zeigen',S.ex)}</div>${S.ex?'<p class="mu">Beispiele zeigen nur, wie dieser Bereich später aussieht. Es sind keine echten Veranstaltungen.</p>':''}`+(live.length?live.map(e=>`<div class="card ev"><span class="date"><b>${e.d.slice(8)}</b>${MON[+e.d.slice(5,7)-1]}</span><div><h3>${EK[e.k||'Fest']} ${esc(e.t)}</h3><p class="mu">${e.o?esc(e.o)+' · ':''}${e.p} · ${e.i}<br>${e.a}</p><span class="st2 ${e.ex?'old':'none'}">${e.ex?'Beispiel':'Selbst vorgemerkt'}</span></div></div>`).join(''):`<div class="card empty"><b class="f">Nichts gefunden</b><p class="mu">Lockere die Filter oder merke dir selbst einen Termin vor. Vergangene Termine verschwinden automatisch.</p></div>`)+(old?`<p class="mu">${old} abgelaufen, ausgeblendet.</p>`:'')+`<button class="btn dark wide" data-form="ev">+ Termin vormerken</button>`;
+  h=`<div class="sc">${['Kostenlos','Drinnen','Draußen'].map(x=>ch('ef',x,x,S.ef===x)).join('')}${Object.keys(EK).map(x=>ch('ek',x,EK[x]+' '+x,S.ek===x)).join('')}</div>${['Köln','Kassel'].includes(S.r)?'<p class="mu">Termine aus öffentlichen Quellen, Stand 14.11.2026. Bitte beim Veranstalter prüfen.</p>':`<div class="row">${ch('ex','1','Beispiel-Termine zeigen',S.ex)}</div>${S.ex?'<p class="mu">Beispiele zeigen nur, wie dieser Bereich später aussieht. Es sind keine echten Veranstaltungen.</p>':''}`}`+(live.length?live.map(e=>`<div class="card ev"><span class="date"><b>${e.d.slice(8)}</b>${MON[+e.d.slice(5,7)-1]}</span><div><h3>${EK[e.k||'Fest']} ${esc(e.t)}</h3><p class="mu">${e.o?esc(e.o)+' · ':''}${e.p} · ${e.i}<br>${e.a}${e.e?'<br>läuft bis '+dmy(e.e):''}${e.note?'<br>'+esc(e.note):''}</p><span class="st2 ${e.ex?'old':e.real?'ok':'none'}">${e.ex?'Beispiel':e.real?'Stand 14.11.2026':'Selbst vorgemerkt'}</span>${e.src?` <a class="chip" target="_blank" rel="noopener" href="${e.src}">Quelle</a>`:''}${e.q?` <a class="chip" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(e.q)}">Ort</a>`:''}</div></div>`).join(''):`<div class="card empty"><b class="f">Nichts gefunden</b><p class="mu">Lockere die Filter oder merke dir selbst einen Termin vor. Vergangene Termine verschwinden automatisch.</p></div>`)+(old?`<p class="mu">${old} abgelaufen, ausgeblendet.</p>`:'')+`<button class="btn dark wide" data-form="ev">+ Termin vormerken</button>`;
  }else if(S.sg==='tr'){
   const arts=Object.keys(TK);
   let L=[...D.tr.map(r=>({t:r.t,a:r.a||'Spaziergang',s:r.s,k:r.k,w:r.w,rr:r.rr,x:r.x,ei:r.ei,g:r.g||'Alle Altersgruppen',l:r.l,dm:r.dm,own:1,q:r.t+' '+S.r})),...(S.ex?TX.filter(x=>x.r===S.r):[])];
@@ -507,6 +530,13 @@ function checkin(n,i){
  const[k,q,bad]=st[i];
  $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><p class="mu">${esc(n)} · Frage ${i+1} von ${st.length}</p><div class="bar"><i style="width:${i/st.length*100}%"></i></div><h2 style="font-size:28px;margin:18px 0">${q}</h2><div class="og g3"><button class="opt" data-ck="ja"><b>${bad?'⚠️':'👍'}</b>Ja</button><button class="opt" data-ck="nein"><b>${bad?'👍':'👎'}</b>Nein</button><button class="opt" data-ck="unbekannt"><b>🤷</b>Weiß nicht</button></div>`;ov(true);S.cur='';
 }
+function video(){S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Erklärvideo</h2><p class="mu">In 68 Sekunden: Was ist ${APP}?</p><video src="erklaervideo.mp4" poster="poster.jpg" controls playsinline preload="metadata" style="display:block;margin:12px auto;max-height:62vh;max-width:100%;border-radius:16px;border:3px solid var(--ink)"></video>`;ov(true)}
+function addMenu(){S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Was möchtest du hinzufügen?</h2><p class="mu">Fehlt etwas? Hilf anderen Familien. Neue Einträge sind als „selbst hinzugefügt“ gekennzeichnet.</p><div class="og g2"><button class="opt" data-add="place"><b>📍</b>Ort</button><button class="opt" data-add="ev"><b>🎄</b>Veranstaltung oder Markt</button><button class="opt" data-add="tr"><b>🥾</b>Tour</button><button class="opt" data-add="fix"><b>✏️</b>Angabe korrigieren</button></div>`;ov(true)}
+function addPlaceForm(){
+ const f=(l,id,t,x)=>`<label class="fld">${l}<input id="${id}" type="${t}" ${x||''}></label>`,s=(l,id,o,sel)=>`<label class="fld">${l}<select id="${id}">${o.map(v=>`<option${v===sel?' selected':''}>${v}</option>`).join('')}</select></label>`;
+ $('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><button class="chip" data-addmenu>‹ Zurück</button><h2>Ort hinzufügen</h2>`+f('Name des Ortes','apn','text','maxlength=80')+s('Stadt','apr',REG,S.r)+s('Art','apc',['Spielplatz','Park','Tierpark','Museum','Erlebniswelt','Bad','Sehenswürdigkeit','Freizeitpark','Café','Sonstiger Ort'])+s('Drinnen oder draußen','apw',['Draußen','Drinnen','Drinnen und draußen'])+f('Adresse oder Hinweis (z. B. Straße)','apa','text','maxlength=100')+f('Link zur Quelle (optional)','aps','url')+`<p class="mu">Bitte keine Personen oder Kinder nennen. Prüfe, ob der Ort öffentlich zugänglich ist.</p><button class="btn dark wide" data-sp>Ort speichern</button><p class="mu" id="aperr" role="alert"></p>`;ov(true);S.cur='';
+}
+function fixForm(){const L=P.filter(p=>p.r===S.r);S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><button class="chip" data-addmenu>‹ Zurück</button><h2>Angabe korrigieren</h2><label class="fld">Ort<select id="fxp">${L.map(p=>`<option>${p.n}</option>`).join('')}</select></label><label class="fld">Was stimmt nicht?<textarea id="fxt" maxlength="300" placeholder="z. B. Öffnungszeiten, geschlossen, falsche Kategorie"></textarea></label><button class="btn dark wide" data-sf>Speichern</button>`;ov(true)}
 function legal(){S.cur='';$('sh').innerHTML=`<button class="x" data-close aria-label="Schließen">✕</button><h2>Regeln und Rechtliches</h2><span class="st2 old">Entwurf, vor Veröffentlichung juristisch prüfen</span>
 <h3 class="sh3">Community-Regeln</h3><p>• Melde nur, was du selbst gesehen hast.<br>• Fotografiere keine Personen und keine Kinder. Zeig nur den Ort oder den Schaden.<br>• Keine Beleidigungen, keine Werbung, keine falschen Angaben.<br>• Bei akuter Gefahr oder Verletzten: sofort 112 rufen. Eine Meldung in der App ersetzt das nicht.</p>
 <h3 class="sh3">Datenschutz in Kürze</h3><p>• Du kannst die App ohne Konto nutzen.<br>• Im Prototyp bleiben alle Angaben auf diesem Handy.<br>• Den Standort fragt dein Handy vorher ab. Er wird nur an eine Meldung gehängt, wenn du es willst.<br>• Fotos werden verkleinert, Standortdaten im Foto werden entfernt.<br>• Es werden keine Namen oder Geburtsdaten von Kindern erfasst.</p>
@@ -538,7 +568,7 @@ function mydata(){S.cur='';const j=JSON.stringify(D);$('sh').innerHTML=`<button 
 function welcome(i){
  S.cur='';const o=(k,v,e,m)=>`<button class="opt${(m?D.prof[k].includes(v):D.prof[k]===v)?' on':''}" data-wp="${k}" data-v="${v}"><b>${e}</b>${v}</button>`;
  const dots=`<p class="mu" style="text-align:center">${[0,1,2].map(k=>k===i?'●':'○').join(' ')}</p>`;
- const body=[`<h2>Willkommen! 👋</h2><p style="margin:14px 0"><span class="sign">FamilySpot</span></p><p>Gute Orte für Kinder finden, den Tag planen und der Stadt sagen, was kaputt ist.</p>`,`<h2>Das machen wir anders</h2><div class="card pad2"><b>🕒 Frische sichtbar</b><p class="mu">Jede Angabe zeigt, wann sie zuletzt bestätigt wurde.</p></div><div class="card pad2"><b>🏛️ Meldung an die Stadt</b><p class="mu">Schäden gehen vorbereitet an den richtigen Meldeweg, mit Status.</p></div><div class="card pad2"><b>🤷 Unbekannt ist kein Nein</b><p class="mu">Was niemand weiß, bewerten wir nicht schlecht.</p></div>`,`<h2>Wer ist dabei?</h2><div class="og g3">${[['Baby','🍼'],['Kleinkind','🧸'],['Kindergarten','🎨'],['Schulkind','🎒'],['Jugendlich','🛹']].map(([v,e])=>o('ages',v,e,1)).join('')}</div><h3 class="sh3">Kinderwagen dabei?</h3><div class="og g2">${o('stroller','Ja','🚼')}${o('stroller','Nein','🚶')}</div>`][i];
+ const body=[`<h2>Willkommen! 👋</h2><p style="margin:14px 0"><span class="sign">${APP}</span></p><p>Gute Orte für Kinder finden, den Tag planen und der Stadt sagen, was kaputt ist.</p><video src="erklaervideo.mp4" poster="poster.jpg" controls playsinline preload="none" style="display:block;margin:12px auto 0;max-height:40vh;max-width:100%;border-radius:16px;border:3px solid var(--ink)"></video>`,`<h2>Das machen wir anders</h2><div class="card pad2"><b>🕒 Frische sichtbar</b><p class="mu">Jede Angabe zeigt, wann sie zuletzt bestätigt wurde.</p></div><div class="card pad2"><b>🏛️ Meldung an die Stadt</b><p class="mu">Schäden gehen vorbereitet an den richtigen Meldeweg, mit Status.</p></div><div class="card pad2"><b>🤷 Unbekannt ist kein Nein</b><p class="mu">Was niemand weiß, bewerten wir nicht schlecht.</p></div>`,`<h2>Wer ist dabei?</h2><div class="og g3">${[['Baby','🍼'],['Kleinkind','🧸'],['Kindergarten','🎨'],['Schulkind','🎒'],['Jugendlich','🛹']].map(([v,e])=>o('ages',v,e,1)).join('')}</div><h3 class="sh3">Kinderwagen dabei?</h3><div class="og g2">${o('stroller','Ja','🚼')}${o('stroller','Nein','🚶')}</div>`][i];
  $('sh').innerHTML=`<button class="x" data-close aria-label="Überspringen">✕</button>${body}${dots}<div class="acts">${i<2?`<button class="btn dark" data-wnext="${i+1}">Weiter</button>`:`<button class="btn dark" data-wdone>Los geht’s</button>`}<button class="btn" data-wdone>Überspringen</button></div>`;ov(true);
 }
 all();
