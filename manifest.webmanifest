@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "FamilySpot",
-  "short_name": "FamilySpot",
-  "description": "Gute Orte für Kinder finden, den Tag planen und Schäden an die Stadt melden.",
+  "name": "Tumbleo",
+  "short_name": "Tumbleo",
+  "description": "Familienorte, auf die man sich verlassen kann: Zustand vor Ort, Tag planen, Schäden melden.",
   "lang": "de",
   "dir": "ltr",
   "start_url": "./",
